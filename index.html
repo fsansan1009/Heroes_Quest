@@ -84,6 +84,19 @@ button{font-family:var(--font-h);}
 .btn-up.w{background:var(--water-d);border-color:rgba(91,190,245,0.28);color:var(--water);}
 .btn-up.g{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#4ade80;}
 .btn-up:disabled{opacity:.38;cursor:default;}
+.tab-btn{
+  flex:1;padding:9px 0;font-family:var(--font-h);font-size:10px;letter-spacing:1.5px;
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  color:rgba(255,255,255,.32);cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  -webkit-appearance:none;
+}
+.tab-btn:hover{color:rgba(255,255,255,.6);background:rgba(255,255,255,.04);}
+.tab-btn.tab-active{
+  background:rgba(232,196,106,.1);
+  border-bottom:2px solid var(--gold);
+  color:var(--gold);
+}
 .badge-team{
   font-size:9px;font-family:var(--font-h);letter-spacing:1px;
   background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.35);
@@ -168,7 +181,7 @@ button{font-family:var(--font-h);}
 @keyframes hpPulse{0%,100%{opacity:1}50%{opacity:.65}}
 .hp-txt{font-size:10px;color:var(--muted);}
 /* Efectos mejorados */
-.eff-row{display:flex;flex-wrap:wrap;gap:3px;min-height:16px;margin-top:3px;}
+.eff-row{display:flex;flex-wrap:wrap;gap:3px;min-height:16px;max-height:38px;overflow:hidden;margin-top:3px;}
 .eff-tag{font-size:10px;line-height:1.4;border-radius:4px;padding:1px 4px;border:1px solid;white-space:nowrap;}
 .eff-tag.positive{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#4ade80;}
 .eff-tag.negative{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.3);color:#f87171;}
@@ -307,7 +320,7 @@ button{font-family:var(--font-h);}
 .mv-desc{font-size:11px;color:var(--text);line-height:1.5;margin-bottom:5px;}
 .mv-reqs{font-size:9px;color:var(--muted);margin-bottom:6px;font-family:var(--font-h);letter-spacing:1px;}
 
-.eff-row{display:flex;flex-wrap:wrap;gap:3px;min-height:15px;margin-top:2px;}
+.eff-row{display:flex;flex-wrap:wrap;gap:3px;min-height:15px;max-height:36px;overflow:hidden;margin-top:2px;}
 .eff-tag{font-size:11px;line-height:1.5;background:rgba(255,255,255,.08);border-radius:3px;padding:0 3px;}
 
 /* ── NOTIFICATIONS ─────────────────────────────────── */
@@ -564,7 +577,6 @@ button{font-family:var(--font-h);}
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:7px;">
-      <div x-show="hasAnyReady()" style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,.8)"></div>
       <span style="font-family:var(--font-h);font-size:10px;letter-spacing:1px;color:rgba(232,196,106,.5)">reinicio <span x-text="missionCountdown"></span></span>
       <span style="font-size:12px;color:rgba(232,196,106,.4)" x-text="showMissions?'▲':'▼'"></span>
     </div>
@@ -575,18 +587,16 @@ button{font-family:var(--font-h);}
     style="flex:1;min-height:0;overflow-y:auto;background:var(--bg)">
 
     <!-- TABS -->
-    <div style="display:flex;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0">
+    <div style="display:flex;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;overflow:hidden">
       <button @click.stop="missionsTab='daily'"
-        :style="missionsTab==='daily'?'background:rgba(232,196,106,.15);border-bottom:2px solid var(--gold);color:var(--gold)':'color:var(--muted)'"
-        style="flex:1;padding:8px 0;font-family:var(--font-h);font-size:10px;letter-spacing:1px;background:none;border:none;cursor:pointer;transition:.15s;position:relative">
-        📜 DIARIAS
-        <span x-show="hasMissionReady()" style="position:absolute;top:5px;right:calc(50% - 22px);width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80"></span>
+        class="tab-btn" :class="missionsTab==='daily' ? 'tab-active' : ''">
+        <span>📜</span><span>DIARIAS</span>
+        <span x-show="hasMissionReady()" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#4ade80;color:#000;font-size:8px;font-weight:700;line-height:1">!</span>
       </button>
       <button @click.stop="missionsTab='achievements'"
-        :style="missionsTab==='achievements'?'background:rgba(232,196,106,.15);border-bottom:2px solid var(--gold);color:var(--gold)':'color:var(--muted)'"
-        style="flex:1;padding:8px 0;font-family:var(--font-h);font-size:10px;letter-spacing:1px;background:none;border:none;cursor:pointer;transition:.15s;position:relative">
-        🏅 LOGROS
-        <span x-show="hasAchievementReady()" style="position:absolute;top:5px;right:calc(50% - 22px);width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80"></span>
+        class="tab-btn" :class="missionsTab==='achievements' ? 'tab-active' : ''">
+        <span>🏅</span><span>LOGROS</span>
+        <span x-show="hasAchievementReady()" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#4ade80;color:#000;font-size:8px;font-weight:700;line-height:1">!</span>
       </button>
     </div>
 
@@ -736,7 +746,7 @@ button{font-family:var(--font-h);}
           <div style="flex:1;min-width:0">
             <div class="bcard-nm">Almacén</div>
             <div class="bcard-lv">Nv.<span x-text="lvls.storage"></span></div>
-            <div class="bcard-sub">Cap <span x-text="lvls.storage*1200+500"></span>🟡</div>
+            <div class="bcard-sub">Cap <span x-text="lvls.storage*2000+1000"></span>🟡</div>
           </div>
           <button class="btn-up" style="align-self:center;flex-shrink:0" @click="upgrade('storage')"><span x-text="upgCost('storage')"></span>🟡</button>
         </div>
@@ -749,7 +759,7 @@ button{font-family:var(--font-h);}
           <div style="flex:1;min-width:0">
             <div class="bcard-nm">Tanque</div>
             <div class="bcard-lv">Nv.<span x-text="lvls.tank"></span></div>
-            <div class="bcard-sub">Cap <span x-text="lvls.tank*1200+500"></span>💧</div>
+            <div class="bcard-sub">Cap <span x-text="lvls.tank*2000+1000"></span>💧</div>
           </div>
           <button class="btn-up" style="align-self:center;flex-shrink:0" @click="upgrade('tank')"><span x-text="upgCost('tank')"></span>🟡</button>
         </div>
@@ -1926,7 +1936,7 @@ function G() { return {
 
   // ── STATE ────────────────────────────────────────────────────
   screen:'village', gold:200, water:200, wins:0, rubies:0,
-  battleGoldEarned:0, negEffApplied:0, orcDefeated:0, bossWins:0, invasionWins:0, totalTrades:0, totalUpgrades:0, currentBattleDeaths:0,
+  battleGoldEarned:0, negEffApplied:0, orcDefeated:0, bossWins:0, invasionWins:0, totalTrades:0, totalUpgrades:0,
   showReset:false, openShopMago:false, openShopSlime:false, openShopMimic:false, openShopHemodus:false,
   showTutorial:false, tutPage:0, showSaveMenu:false, showMissions:false, missionsTab:'daily',
   achievementProgress:{}, achievementClaimed:{},
@@ -1963,37 +1973,37 @@ function G() { return {
   dailyMissions:[], missionProgress:{}, missionClaimed:{}, missionDate:null, missionCountdown:'00:00:00',
 
   MISSION_POOL:[
-    { id:'read_tutorial',title:'Leer la guía',           desc:'Lee la guía completa del juego (una sola vez).',     goal:1,  type:'read_tutorial',emoji:'📖', reward:{gold:300,water:300,rubies:2}, oneTime:true },
-    { id:'login',       title:'Primer inicio del día',  desc:'Inicia sesión y recibe tu recompensa diaria.',       goal:1,  type:'login',       emoji:'☀️', reward:{gold:150,water:100,rubies:0} },
-    { id:'win1',        title:'Primera victoria',        desc:'Gana 1 batalla.',                                    goal:1,  type:'wins',        emoji:'⚔️', reward:{gold:200,water:50, rubies:0} },
-    { id:'win3',        title:'Guerrero del día',         desc:'Gana 3 batallas.',                                   goal:3,  type:'wins',        emoji:'🏆', reward:{gold:300,water:0,  rubies:1} },
-    { id:'win5',        title:'Conquistador imparable',  desc:'Gana 5 batallas en un mismo día.',                   goal:5,  type:'wins',        emoji:'👑', reward:{gold:0,  water:0,  rubies:2} },
-    { id:'upgrade1',    title:'Primera mejora',           desc:'Mejora cualquier edificio o campamento.',            goal:1,  type:'upgrades',    emoji:'⚒️', reward:{gold:100,water:100,rubies:0} },
-    { id:'upgrade3',    title:'Constructor activo',       desc:'Mejora 3 edificios o campamentos.',                 goal:3,  type:'upgrades',    emoji:'🏗️', reward:{gold:0,  water:250,rubies:0} },
-    { id:'upgrade5',    title:'Gran constructor',         desc:'Mejora 5 edificios o campamentos.',                 goal:5,  type:'upgrades',    emoji:'🏰', reward:{gold:200,water:350,rubies:0} },
-    { id:'research1',   title:'Investigador',             desc:'Investiga 1 movimiento en el Laboratorio.',         goal:1,  type:'research',    emoji:'⚗️', reward:{gold:0,  water:200,rubies:0} },
-    { id:'research2',   title:'Maestro investigador',     desc:'Investiga 2 movimientos en el Laboratorio.',        goal:2,  type:'research',    emoji:'🔬', reward:{gold:150,water:300,rubies:0} },
-    { id:'levelup1',    title:'Entrenamiento diario',    desc:'Sube de nivel a un héroe.',                          goal:1,  type:'levelup',     emoji:'📈', reward:{gold:200,water:0,  rubies:0} },
-    { id:'levelup3',    title:'Maestro entrenador',      desc:'Sube de nivel a héroes 3 veces.',                   goal:3,  type:'levelup',     emoji:'🌟', reward:{gold:350,water:100,rubies:0} },
-    { id:'equip1',      title:'Armamento listo',         desc:'Equipa 1 movimiento a cualquier héroe.',             goal:1,  type:'equip',       emoji:'🗡️', reward:{gold:50, water:150,rubies:0} },
-    { id:'team3',       title:'Equipo completo',         desc:'Forma un equipo de 3 héroes.',                       goal:1,  type:'team3',       emoji:'🧑‍🤝‍🧑', reward:{gold:200,water:200,rubies:0} },
-    { id:'goldmax',     title:'Cofres llenos',           desc:'Acumula el máximo de oro posible.',                  goal:1,  type:'goldmax',     emoji:'💰', reward:{gold:0,  water:300,rubies:0} },
-    { id:'watermax',    title:'Reservas de agua',        desc:'Acumula el máximo de agua posible.',                 goal:1,  type:'watermax',    emoji:'🌊', reward:{gold:300,water:0,  rubies:0} },
-    { id:'core_up',     title:'El corazón crece',        desc:'Mejora el Núcleo de tu aldea.',                      goal:1,  type:'core_up',     emoji:'🏰', reward:{gold:500,water:500,rubies:1} },
-    { id:'use_move5',   title:'En calor de batalla',     desc:'Usa 5 movimientos en combate.',                      goal:5,  type:'use_move',    emoji:'🗡️', reward:{gold:100,water:100,rubies:0} },
-    { id:'use_move15',  title:'Incansable luchador',     desc:'Usa 15 movimientos en combate.',                     goal:15, type:'use_move',    emoji:'⚔️', reward:{gold:200,water:200,rubies:0} },
-    { id:'use_special3',title:'Poder arcano',            desc:'Usa 3 movimientos especiales en combate.',           goal:3,  type:'use_special', emoji:'✨', reward:{gold:0,  water:250,rubies:0} },
-    { id:'use_special8',title:'Maestro de lo arcano',    desc:'Usa 8 movimientos especiales en combate.',           goal:8,  type:'use_special', emoji:'🔮', reward:{gold:150,water:350,rubies:0} },
-    { id:'apply_effect1',title:'Estratega',              desc:'Aplica 1 efecto de estado al enemigo.',              goal:1,  type:'apply_effect',emoji:'🎯', reward:{gold:100,water:50, rubies:0} },
-    { id:'apply_effect5',title:'Maestro de efectos',     desc:'Aplica 5 efectos de estado al enemigo.',             goal:5,  type:'apply_effect',emoji:'💫', reward:{gold:200,water:150,rubies:0} },
-    { id:'apply_self3',  title:'Autopotenciador',        desc:'Aplica 3 efectos de estado a tu propio héroe.',      goal:3,  type:'apply_self',  emoji:'🌀', reward:{gold:150,water:100,rubies:0} },
-    { id:'apply_self7',  title:'Maestro del yo',         desc:'Aplica 7 efectos de estado a tu propio héroe.',      goal:7,  type:'apply_self',  emoji:'🧘', reward:{gold:0,  water:300,rubies:1} },
-    { id:'crits3',       title:'Golpe preciso',          desc:'Consigue 3 golpes críticos.',                        goal:3,  type:'crits',       emoji:'💥', reward:{gold:150,water:100,rubies:0} },
-    { id:'crits8',       title:'Ojo de águila',          desc:'Consigue 8 golpes críticos.',                        goal:8,  type:'crits',       emoji:'🦅', reward:{gold:0,  water:300,rubies:1} },
-    { id:'trade3',       title:'Comerciante novato',     desc:'Realiza 3 intercambios en el Mercado.',              goal:3,  type:'trade',       emoji:'🏪', reward:{gold:150,water:150,rubies:0} },
-    { id:'trade10',      title:'Mercader experto',       desc:'Realiza 10 intercambios en el Mercado.',             goal:10, type:'trade',       emoji:'💹', reward:{gold:0,  water:500,rubies:1} },
-    { id:'event1',       title:'¡Un visitante!',         desc:'Acepta 1 evento aleatorio.',                         goal:1,  type:'event_accept',emoji:'🎭', reward:{gold:200,water:0,  rubies:0} },
-    { id:'event5',       title:'Veterano de eventos',    desc:'Acepta 5 eventos aleatorios.',                       goal:5,  type:'event_accept',emoji:'🎪', reward:{gold:300,water:300,rubies:1} },
+    { id:'read_tutorial',title:'Leer la guía',           desc:'Lee la guía completa del juego (una sola vez).',     goal:1,  type:'read_tutorial',emoji:'📖', reward:{gold:800, water:800, rubies:2}, oneTime:true },
+    { id:'login',       title:'Primer inicio del día',  desc:'Inicia sesión y recibe tu recompensa diaria.',       goal:1,  type:'login',       emoji:'☀️', reward:{gold:600, water:400, rubies:0} },
+    { id:'win1',        title:'Primera victoria',        desc:'Gana 1 batalla.',                                    goal:1,  type:'wins',        emoji:'⚔️', reward:{gold:700, water:300, rubies:0} },
+    { id:'win3',        title:'Guerrero del día',         desc:'Gana 3 batallas.',                                   goal:3,  type:'wins',        emoji:'🏆', reward:{gold:1200,water:0,   rubies:1} },
+    { id:'win5',        title:'Conquistador imparable',  desc:'Gana 5 batallas en un mismo día.',                   goal:5,  type:'wins',        emoji:'👑', reward:{gold:0,   water:0,   rubies:3} },
+    { id:'upgrade1',    title:'Primera mejora',           desc:'Mejora cualquier edificio o campamento.',            goal:1,  type:'upgrades',    emoji:'⚒️', reward:{gold:400, water:400, rubies:0} },
+    { id:'upgrade3',    title:'Constructor activo',       desc:'Mejora 3 edificios o campamentos.',                 goal:3,  type:'upgrades',    emoji:'🏗️', reward:{gold:0,   water:900, rubies:0} },
+    { id:'upgrade5',    title:'Gran constructor',         desc:'Mejora 5 edificios o campamentos.',                 goal:5,  type:'upgrades',    emoji:'🏰', reward:{gold:800, water:1200,rubies:0} },
+    { id:'research1',   title:'Investigador',             desc:'Investiga 1 movimiento en el Laboratorio.',         goal:1,  type:'research',    emoji:'⚗️', reward:{gold:0,   water:700, rubies:0} },
+    { id:'research2',   title:'Maestro investigador',     desc:'Investiga 2 movimientos en el Laboratorio.',        goal:2,  type:'research',    emoji:'🔬', reward:{gold:600, water:1000,rubies:0} },
+    { id:'levelup1',    title:'Entrenamiento diario',    desc:'Sube de nivel a un héroe.',                          goal:1,  type:'levelup',     emoji:'📈', reward:{gold:700, water:0,   rubies:0} },
+    { id:'levelup3',    title:'Maestro entrenador',      desc:'Sube de nivel a héroes 3 veces.',                   goal:3,  type:'levelup',     emoji:'🌟', reward:{gold:1400,water:500, rubies:0} },
+    { id:'equip1',      title:'Armamento listo',         desc:'Equipa 1 movimiento a cualquier héroe.',             goal:1,  type:'equip',       emoji:'🗡️', reward:{gold:200, water:500, rubies:0} },
+    { id:'team3',       title:'Equipo completo',         desc:'Forma un equipo de 3 héroes.',                       goal:1,  type:'team3',       emoji:'🧑‍🤝‍🧑', reward:{gold:700, water:700, rubies:0} },
+    { id:'goldmax',     title:'Cofres llenos',           desc:'Acumula el máximo de oro posible.',                  goal:1,  type:'goldmax',     emoji:'💰', reward:{gold:0,   water:1000,rubies:0} },
+    { id:'watermax',    title:'Reservas de agua',        desc:'Acumula el máximo de agua posible.',                 goal:1,  type:'watermax',    emoji:'🌊', reward:{gold:1000,water:0,   rubies:0} },
+    { id:'core_up',     title:'El corazón crece',        desc:'Mejora el Núcleo de tu aldea.',                      goal:1,  type:'core_up',     emoji:'🏰', reward:{gold:2000,water:2000,rubies:1} },
+    { id:'use_move5',   title:'En calor de batalla',     desc:'Usa 5 movimientos en combate.',                      goal:5,  type:'use_move',    emoji:'🗡️', reward:{gold:400, water:400, rubies:0} },
+    { id:'use_move15',  title:'Incansable luchador',     desc:'Usa 15 movimientos en combate.',                     goal:15, type:'use_move',    emoji:'⚔️', reward:{gold:800, water:800, rubies:0} },
+    { id:'use_special3',title:'Poder arcano',            desc:'Usa 3 movimientos especiales en combate.',           goal:3,  type:'use_special', emoji:'✨', reward:{gold:0,   water:900, rubies:0} },
+    { id:'use_special8',title:'Maestro de lo arcano',    desc:'Usa 8 movimientos especiales en combate.',           goal:8,  type:'use_special', emoji:'🔮', reward:{gold:600, water:1200,rubies:0} },
+    { id:'apply_effect1',title:'Estratega',              desc:'Aplica 1 efecto de estado al enemigo.',              goal:1,  type:'apply_effect',emoji:'🎯', reward:{gold:400, water:200, rubies:0} },
+    { id:'apply_effect5',title:'Maestro de efectos',     desc:'Aplica 5 efectos de estado al enemigo.',             goal:5,  type:'apply_effect',emoji:'💫', reward:{gold:800, water:600, rubies:0} },
+    { id:'apply_self3',  title:'Autopotenciador',        desc:'Aplica 3 efectos de estado a tu propio héroe.',      goal:3,  type:'apply_self',  emoji:'🌀', reward:{gold:600, water:400, rubies:0} },
+    { id:'apply_self7',  title:'Maestro del yo',         desc:'Aplica 7 efectos de estado a tu propio héroe.',      goal:7,  type:'apply_self',  emoji:'🧘', reward:{gold:0,   water:1200,rubies:1} },
+    { id:'crits3',       title:'Golpe preciso',          desc:'Consigue 3 golpes críticos.',                        goal:3,  type:'crits',       emoji:'💥', reward:{gold:600, water:400, rubies:0} },
+    { id:'crits8',       title:'Ojo de águila',          desc:'Consigue 8 golpes críticos.',                        goal:8,  type:'crits',       emoji:'🦅', reward:{gold:0,   water:1200,rubies:1} },
+    { id:'trade3',       title:'Comerciante novato',     desc:'Realiza 3 intercambios en el Mercado.',              goal:3,  type:'trade',       emoji:'🏪', reward:{gold:600, water:600, rubies:0} },
+    { id:'trade10',      title:'Mercader experto',       desc:'Realiza 10 intercambios en el Mercado.',             goal:10, type:'trade',       emoji:'💹', reward:{gold:0,   water:2000,rubies:1} },
+    { id:'event1',       title:'¡Un visitante!',         desc:'Acepta 1 evento aleatorio.',                         goal:1,  type:'event_accept',emoji:'🎭', reward:{gold:700, water:0,   rubies:0} },
+    { id:'event5',       title:'Veterano de eventos',    desc:'Acepta 5 eventos aleatorios.',                       goal:5,  type:'event_accept',emoji:'🎪', reward:{gold:1200,water:1200,rubies:1} },
   ],
 
   ACHIEVEMENTS:[
@@ -2565,7 +2575,7 @@ function G() { return {
   claimMission(id){
     const m=this.dailyMissions.find(m=>m.id===id); if(!m||this.missionClaimed[id]) return;
     if((this.missionProgress[id]||0)<m.goal) return;
-    const scale = Math.max(1, Math.ceil(this.enemyLevel / 10));
+    const scale = Math.max(1, this.lvls.core);
     const scaledGold  = Math.floor(m.reward.gold  * scale);
     const scaledWater = Math.floor(m.reward.water * scale);
     if(scaledGold>0&&m.reward.water===0&&this.gold>=this.maxGold) return this.notif('¡Almacén lleno!','#f97316');
@@ -2589,14 +2599,17 @@ function G() { return {
   claimAchievement(id){
     const a=this.ACHIEVEMENTS.find(a=>a.id===id); if(!a||this.achievementClaimed[id]) return;
     if(!a.cond(this)) return;
-    if(a.reward.gold>0&&a.reward.water===0&&this.gold>=this.maxGold) return this.notif('¡Almacén lleno!','#f97316');
-    if(a.reward.water>0&&a.reward.gold===0&&this.water>=this.maxWater) return this.notif('¡Tanque lleno!','#f97316');
-    if(a.reward.gold>0&&a.reward.water>0&&this.gold>=this.maxGold&&this.water>=this.maxWater) return this.notif('¡Ambos almacenes llenos!','#f97316');
-    this.gold=Math.min(this.gold+a.reward.gold,this.maxGold);
-    this.water=Math.min(this.water+a.reward.water,this.maxWater);
+    const scale = Math.max(1, this.lvls.core);
+    const scaledGold  = Math.floor(a.reward.gold  * scale);
+    const scaledWater = Math.floor(a.reward.water * scale);
+    if(scaledGold>0&&a.reward.water===0&&this.gold>=this.maxGold) return this.notif('¡Almacén lleno!','#f97316');
+    if(scaledWater>0&&a.reward.gold===0&&this.water>=this.maxWater) return this.notif('¡Tanque lleno!','#f97316');
+    if(scaledGold>0&&scaledWater>0&&this.gold>=this.maxGold&&this.water>=this.maxWater) return this.notif('¡Ambos almacenes llenos!','#f97316');
+    this.gold=Math.min(this.gold+scaledGold,this.maxGold);
+    this.water=Math.min(this.water+scaledWater,this.maxWater);
     this.rubies+=a.reward.rubies;
     this.achievementClaimed[id]=true; this.save();
-    const parts=[]; if(a.reward.gold>0) parts.push(`+${a.reward.gold}🟡`); if(a.reward.water>0) parts.push(`+${a.reward.water}💧`); if(a.reward.rubies>0) parts.push(`+${a.reward.rubies}♦`);
+    const parts=[]; if(scaledGold>0) parts.push(`+${scaledGold}🟡`); if(scaledWater>0) parts.push(`+${scaledWater}💧`); if(a.reward.rubies>0) parts.push(`+${a.reward.rubies}♦`);
     this.notif(`🏅 Logro: ${a.title} — ${parts.join(' ')}`,'#e8c46a');
   },
   hasAchievementReady(){ return this.ACHIEVEMENTS.some(a=>!this.achievementClaimed[a.id]&&a.cond(this)); },
@@ -2932,7 +2945,6 @@ function G() { return {
     const bossRound = !this.invasionBattle && this._isBossRound(round);
     this._ended=false; this.result=null; this.log=[]; this.activeIdx=0;
     this.switching=false; this.forcedSwitch=false; this.pAnim='idle'; this.eAnim='eidle';
-    this.currentBattleDeaths=0;
     this.activeEffects={ player:[], enemy:[] };
     this.waveQueue = this.invasionBattle ? this._buildInvasionWave() : this._buildWave();
     this.waveTotal = this.waveQueue.length;
@@ -3075,7 +3087,7 @@ function G() { return {
 
     // No acumular el mismo efecto
     if(list.find(e=>e.id===id)) return;
-    if(list.length>=6){ this._log(`⚠️ Máx. efectos alcanzado`,'color:var(--muted)'); return; }
+    if(list.length>=8){ this._log(`⚠️ Máx. efectos alcanzado`,'color:var(--muted)'); return; }
 
     const entry = { id, turns };
     // Escudo: almacena HP del escudo
@@ -3132,6 +3144,37 @@ function G() { return {
         const nm=who==='player'?this.AF()?.name:this.enemy.name;
         this._log(`${ef?.emoji||''} ${nm}: ${ef?.name||id} ha expirado`,'color:var(--muted)');
       }
+    }
+  },
+  // Aplica DOTs al jugador activo sin tocar al enemigo.
+  // Se llama antes de _win() anticipado para que los efectos activos siempre ticken.
+  _playerDotsOnly(){
+    const fx = this.activeEffects.player;
+    if(!fx.length) return;
+    const h = this.AF(); if(!h || h.hp<=0) return;
+    const maxHp = h.maxHp || 1;
+    const dot1 = v => Math.max(1, Math.floor(v));
+    if(fx.find(e=>e.id==='poison')){
+      const dot=dot1(maxHp*0.09); h.hp=Math.max(0,h.hp-dot);
+      this._log(`☠️ ${h.name}: Veneno -${dot} HP`,'color:#86efac');
+    }
+    if(h.hp>0 && fx.find(e=>e.id==='regeneration')){
+      const heal=Math.floor(maxHp*0.10); h.hp=Math.min(maxHp,h.hp+heal);
+      this._log(`💚 ${h.name}: Regeneración +${heal} HP`,'color:#4ade80');
+    }
+    if(h.hp>0 && fx.find(e=>e.id==='bleed')){
+      const dot=dot1(maxHp*0.07); h.hp=Math.max(0,h.hp-dot);
+      this._log(`🩸 ${h.name}: Sangrado -${dot} HP`,'color:#f43f5e');
+    }
+    if(h.hp>0 && fx.find(e=>e.id==='burn')){
+      const dot=dot1(maxHp*0.07); h.hp=Math.max(0,h.hp-dot);
+      this._log(`🔥 ${h.name}: Quemadura -${dot} HP`,'color:#f97316');
+    }
+    const decomp=fx.find(e=>e.id==='decomp');
+    if(h.hp>0 && decomp){
+      const dot=dot1(maxHp*0.0625*decomp.stacks); h.hp=Math.max(0,h.hp-dot);
+      this._log(`🦠 ${h.name}: Descomposición -${dot} HP (pila ${decomp.stacks})`,'color:#a3e635');
+      decomp.stacks++;
     }
   },
   _dotEffects(){
@@ -3332,7 +3375,7 @@ function G() { return {
     else   { this.eAnim='eatk'; setTimeout(()=>this.eAnim='eidle',350); }
 
     const defDefeated = (cont) => {
-      if(isP){ this.bat.eHp=0; this._win(); return false; }
+      if(isP){ this.bat.eHp=0; this._playerDotsOnly(); this._win(); return false; }
       defHero.hp=0;
       this._log(`💀 ${defHero.name} ha caído!`,'color:var(--danger)');
       return this._heroFallen(cont);
@@ -3548,7 +3591,7 @@ function G() { return {
             this._log(`🔁 ¡Rebote! ${atker.name} devuelve ${dmgAfterShield} (${rebSp?'ESP':'FÍS'}) al enemigo!`,'color:#818cf8');
             this._float('-'+dmgAfterShield, 0.65, 0.35, '#818cf8');
             this.bat.reboteRawDmg = 0; // consumido
-            if(this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
+            if(this.bat.eHp<=0){ this.bat.eHp=0; this._playerDotsOnly(); this._win(); return; }
           }
         } else {
           this._log(`🔁 Rebote: el enemigo no hizo daño este turno, falla`,'color:var(--muted)');
@@ -3676,7 +3719,7 @@ function G() { return {
         this.bat.eHp = Math.max(0, this.bat.eHp - counterDmg);
         this._log(`🛡️ ¡PARRY! ${defHero.name} bloquea y devuelve ${counterDmg} a ${atker.name}!`,'color:#2dd4bf');
         this._float('-'+counterDmg, 0.65, 0.35, '#2dd4bf');
-        if(this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
+        if(this.bat.eHp<=0){ this.bat.eHp=0; this._playerDotsOnly(); this._win(); return; }
         setTimeout(cb,650); return; // daño bloqueado, no continúa
       }
     }
@@ -3689,7 +3732,7 @@ function G() { return {
       floatDef('-'+massDmg,'#f87171');
       if(isP){ this.battleStats.dmg+=massDmg; if(this.battleStats.heroContrib[atker.id]!=null) this.battleStats.heroContrib[atker.id]+=massDmg; this.eAnim='eatk'; setTimeout(()=>this.eAnim='eidle',350); }
       if(getDHp()<=0){ if(defDefeated(()=>{setTimeout(()=>{ if(!this._ended){this._endTurn();} },300);})) setTimeout(cb,650); return; }
-      if(isP && getDHp()<=0){ this._win(); return; }
+      if(isP && getDHp()<=0){ this._playerDotsOnly(); this._win(); return; }
       setTimeout(cb,650); return;
     }
 
@@ -3891,7 +3934,7 @@ function G() { return {
     }
 
     // Comprobación final de derrota (enemigo)
-    if(isP && getDHp()<=0){ this._win(); return; }
+    if(isP && getDHp()<=0){ this._playerDotsOnly(); this._win(); return; }
 
     // ── Cambio forzado (swap) ──────────────────────────────────
     if(isP && move.effects.find(e=>e.id==='swap')){
@@ -3962,7 +4005,7 @@ function G() { return {
   },
   _shouldEnemySwitch(){
     if(this.bat.enemySwitchCd > 0) return -1;
-    if(this._hasEffect('enemy','freeze') || this._hasEffect('enemy','stun')) return -1;
+    if(this._hasEffect('enemy','freeze') || this._hasEffect('enemy','stun') || this._hasEffect('enemy','trap')) return -1;
     const aliveIdxs = this.waveQueue.map((e,i)=>i).filter(i => i !== this.bat.activeEnemyIdx && this.waveQueue[i].currentHp > 0);
     if(aliveIdxs.length === 0) return -1;
     const hpPct = this.bat.eHp / this.bat.eMax;
@@ -3988,7 +4031,6 @@ function G() { return {
   _nextAlive(){ for(let i=0;i<this.bat.heroes.length;i++) if(this.bat.heroes[i].hp>0) return i; return -1; },
   // Gestiona la caída de un héroe: si queda 1 vivo → auto-switch; si >1 → elige
   _heroFallen(cb){
-    this.currentBattleDeaths++;
     const aliveCount = this.bat.heroes.filter(h=>h.hp>0).length;
     if(aliveCount===0){ this._lose(); return false; }
     if(aliveCount===1){
@@ -4050,7 +4092,7 @@ function G() { return {
       this.invasionBattle = false;
       const goblinBonus  = this.bat.goblinFielded ? 1.3 : 1.0;
       const eLvl         = this._maxHeroLvl() + 2;
-      const invReward    = Math.floor((40 + eLvl * 8) * 4 * goblinBonus);
+      const invReward    = Math.floor((50 + eLvl*4 + eLvl*eLvl*2) * 4 * goblinBonus);
       this.goldAdded  = this.gold  < this.maxGold  ? Math.min(invReward, this.maxGold  - this.gold)  : 0;
       this.waterAdded = this.water < this.maxWater ? Math.min(invReward, this.maxWater - this.water) : 0;
       this.gold  = Math.min(this.gold  + this.goldAdded,  this.maxGold);
@@ -4072,7 +4114,7 @@ function G() { return {
     const firstEnemy   = this.waveQueue?.[0];
     const effectiveLvl = firstEnemy ? firstEnemy.level : this.enemyLevel;
     const atCap        = !this.bat?.isBossRound && this.enemyLevel >= this._enemyCap();
-    this.reward = Math.floor((40 + effectiveLvl * 8) * goblinBonus * bossMulti);
+    this.reward = Math.floor((50 + effectiveLvl*4 + effectiveLvl*effectiveLvl*2) * goblinBonus * bossMulti);
     this.rubiesAdded = 0;
     if(this.bat?.isBossRound){
       this.rubies += 3; this.rubiesAdded = 3;
