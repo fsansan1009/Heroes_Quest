@@ -534,6 +534,65 @@ button{font-family:var(--font-h);}
   background:rgba(0,0,0,.3);border-radius:8px;padding:10px 12px;margin-bottom:12px;
   border:1px solid rgba(255,255,255,.08);
 }
+
+/* ── CAMPAÑA / MAZMORRA ─────────────────────────────── */
+.camp-map{display:flex;align-items:center;justify-content:center;gap:0;padding:18px 8px;overflow-x:auto;}
+.camp-room{
+  width:56px;height:64px;border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;border:1px solid;
+  flex-shrink:0;transition:all .2s;
+}
+.camp-room-emoji{font-size:22px;line-height:1;}
+.camp-room-lbl{font-family:var(--font-h);font-size:7px;letter-spacing:.5px;color:var(--muted);}
+.camp-connector{
+  width:20px;height:2px;flex-shrink:0;border-radius:1px;
+  background:rgba(255,255,255,.08);position:relative;top:0;
+}
+.camp-connector.done{background:rgba(74,222,128,.35);}
+.camp-room.current{
+  background:rgba(232,196,106,.12);border-color:rgba(232,196,106,.5);
+  box-shadow:0 0 14px rgba(232,196,106,.2);
+}
+.camp-room.current .camp-room-lbl{color:var(--gold);}
+.camp-room.done{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.3);}
+.camp-room.done .camp-room-lbl{color:#4ade80;}
+.camp-room.locked{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.08);opacity:.45;}
+.camp-room.boss-room{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.4);}
+.camp-room.boss-room.current{box-shadow:0 0 14px rgba(248,113,113,.25);}
+.camp-room.boss-room .camp-room-lbl{color:#f87171;}
+.camp-hero-row{display:flex;gap:6px;padding:0 4px;margin-bottom:10px;}
+.camp-hero-card{
+  flex:1;background:var(--surf);border:1px solid var(--border);
+  border-radius:8px;padding:7px 9px;min-width:0;
+}
+.camp-hero-nm{font-family:var(--font-h);font-size:9px;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.camp-hero-dead{opacity:.35;}
+.btn-campaign{
+  width:100%;padding:13px;margin-top:8px;
+  background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.35);color:#c084fc;
+  font-size:12px;letter-spacing:3px;border-radius:var(--r);cursor:pointer;
+  text-transform:uppercase;transition:all .15s;
+}
+.btn-campaign:hover{background:rgba(192,132,252,.22);}
+.btn-campaign:active{transform:scale(.99);}
+.btn-campaign:disabled{opacity:.38;cursor:default;}
+
+/* ── LOG MEJORADO ───────────────────────────────────── */
+.log-sep{
+  border:none;border-top:1px solid rgba(255,255,255,.07);
+  margin:5px 0;opacity:1;display:block;
+}
+.log-crit{
+  font-weight:700;font-size:13px;
+  text-shadow:0 0 8px rgba(232,196,106,.5);
+}
+.log-death{
+  font-weight:700;font-size:13px;
+}
+.log-room{
+  font-family:var(--font-h);font-size:11px;letter-spacing:1.5px;
+  padding:2px 0;
+}
 </style>
 </head>
 <body>
@@ -912,6 +971,7 @@ button{font-family:var(--font-h);}
     </div>
 
     <button class="btn-atk" @click="startBattle()" :disabled="team.length===0">⚔️ ATACAR</button>
+    <button class="btn-campaign" @click="startCampaign()" :disabled="team.length===0" style="margin-top:8px">🗺️ MAZMORRA — 5 SALAS</button>
 
     <!-- GUARDADO -->
     <div class="stitle" style="margin-top:18px">Guardado</div>
@@ -950,44 +1010,145 @@ button{font-family:var(--font-h);}
     <!-- Resultado: fixed, cubre toda la pantalla -->
     <div x-show="result!==null" x-cloak class="result-overlay">
       <div class="result-inner">
-      <div class="result-title"
-        :style="result==='win'?'color:var(--gold)':'color:var(--danger)'"
-        x-text="result==='win'?'⚔️ VICTORIA':'💀 DERROTA'"></div>
-      <template x-if="result==='win'">
-        <div class="result-reward">
-          <span x-show="goldAdded>0">+<span x-text="goldAdded"></span>🟡 </span>
-          <span x-show="waterAdded>0">+<span x-text="waterAdded"></span>💧 </span>
-          +<span x-text="rubiesAdded"></span>♦
+
+      <!-- ── VICTORIA SALA (campaña) ───────────────────── -->
+      <template x-if="result==='campaign_room'">
+        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <div class="result-title" style="color:#c084fc;font-size:22px;margin-bottom:6px">✅ SALA <span x-text="campaignRoom"></span> COMPLETADA</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-family:var(--font-h);letter-spacing:1px">💚 +25% HP recuperado</div>
+          <div class="result-reward" x-show="goldAdded>0||waterAdded>0">
+            <span x-show="goldAdded>0">+<span x-text="goldAdded"></span>🟡 </span>
+            <span x-show="waterAdded>0">+<span x-text="waterAdded"></span>💧</span>
+          </div>
+          <div class="result-stats" style="margin-bottom:14px">
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.dmg"></div>
+              <div class="result-stat-lbl">DMG TOTAL</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.crits"></div>
+              <div class="result-stat-lbl">CRÍTICOS</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="campaignRoom+'/5'"></div>
+              <div class="result-stat-lbl">PROGRESO</div>
+            </div>
+          </div>
+          <!-- Hero HP preview after heal -->
+          <div style="display:flex;gap:6px;margin-bottom:14px;width:100%;justify-content:center">
+            <template x-for="h in (campaignHeroes||[])" :key="h.id">
+              <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 9px;text-align:center;flex:1;min-width:0;max-width:90px">
+                <div style="font-size:16px" x-text="h.emoji"></div>
+                <div style="font-size:9px;font-family:var(--font-h);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" x-text="h.name"></div>
+                <div style="font-size:9px;margin-top:2px" :style="h.hp<=0?'color:#f87171':'color:#4ade80'" x-text="h.hp<=0?'CAÍDO':Math.floor(h.hp)+'/'+h.maxHp"></div>
+              </div>
+            </template>
+          </div>
+          <div style="display:flex;gap:9px;width:100%">
+            <button class="btn-return" style="flex:1;background:rgba(192,132,252,.15);border-color:rgba(192,132,252,.4);color:#c084fc" @click="nextCampaignRoom()">SIGUIENTE SALA →</button>
+            <button class="btn-return" style="flex:0 0 auto;font-size:10px;background:transparent;border-color:rgba(255,255,255,.15);color:var(--muted)" @click="abandonCampaign()">✕ SALIR</button>
+          </div>
         </div>
       </template>
-      <template x-if="result==='lose'">
-        <div class="result-sub">El equipo cayó en batalla</div>
+
+      <!-- ── VICTORIA FINAL (campaña) ──────────────────── -->
+      <template x-if="result==='campaign_win'">
+        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <div style="font-size:32px;margin-bottom:6px">🏆</div>
+          <div class="result-title" style="color:var(--gold);font-size:24px">MAZMORRA COMPLETADA</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px">5 salas superadas · Jefe derrotado</div>
+          <div class="result-reward" style="margin-bottom:6px">
+            <span x-show="campaignGoldEarned>0">+<span x-text="campaignGoldEarned"></span>🟡 </span>
+            <span x-show="campaignWaterEarned>0">+<span x-text="campaignWaterEarned"></span>💧 </span>
+            +<span x-text="campaignRubiesEarned"></span>♦
+          </div>
+          <div style="font-size:10px;color:rgba(232,196,106,.6);font-family:var(--font-h);margin-bottom:14px;letter-spacing:1px">RECOMPENSA ×2 + 5♦ BONUS</div>
+          <div class="result-stats">
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.dmg"></div>
+              <div class="result-stat-lbl">DMG FINAL</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.crits"></div>
+              <div class="result-stat-lbl">CRÍTICOS</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.turns"></div>
+              <div class="result-stat-lbl">TURNOS</div>
+            </div>
+          </div>
+          <button class="btn-return" @click="exitCampaign()">← VOLVER A LA ALDEA</button>
+        </div>
       </template>
-      <div class="result-stats">
-        <div class="result-stat">
-          <div class="result-stat-val" x-text="battleStats.dmg"></div>
-          <div class="result-stat-lbl">DMG TOTAL</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-val" x-text="battleStats.crits"></div>
-          <div class="result-stat-lbl">CRÍTICOS</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-val" x-text="battleStats.efx"></div>
-          <div class="result-stat-lbl">EFECTOS</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-val" x-text="battleStats.turns"></div>
-          <div class="result-stat-lbl">TURNOS</div>
-        </div>
-      </div>
-      <template x-if="mvpHero()">
-        <div class="result-mvp">
-          ⭐ MVP: <span x-text="mvpHero().emoji+' '+mvpHero().name"></span>
-          (<span x-text="mvpHero().dmg"></span> dmg)
+
+      <!-- ── DERROTA EN CAMPAÑA ─────────────────────────── -->
+      <template x-if="result==='campaign_lose'">
+        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <div class="result-title" style="color:var(--danger)">💀 DERROTA</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">La mazmorra ha terminado en la sala <span x-text="campaignRoom+1"></span></div>
+          <div x-show="campaignGoldEarned>0||campaignWaterEarned>0" class="result-reward">
+            <span style="font-size:11px;color:var(--muted)">Conseguido: </span>
+            <span x-show="campaignGoldEarned>0">+<span x-text="campaignGoldEarned"></span>🟡 </span>
+            <span x-show="campaignWaterEarned>0">+<span x-text="campaignWaterEarned"></span>💧</span>
+          </div>
+          <div class="result-stats">
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="battleStats.dmg"></div>
+              <div class="result-stat-lbl">DMG TOTAL</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" x-text="(campaignRoom)+'/5'"></div>
+              <div class="result-stat-lbl">SALAS</div>
+            </div>
+          </div>
+          <button class="btn-return" @click="exitCampaign()">← VOLVER</button>
         </div>
       </template>
-      <button class="btn-return" @click="exitBattle()">← VOLVER</button>
+
+      <!-- ── NORMAL WIN / LOSE ──────────────────────────── -->
+      <template x-if="result==='win'||result==='lose'">
+        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+        <div class="result-title"
+          :style="result==='win'?'color:var(--gold)':'color:var(--danger)'"
+          x-text="result==='win'?'⚔️ VICTORIA':'💀 DERROTA'"></div>
+        <template x-if="result==='win'">
+          <div class="result-reward">
+            <span x-show="goldAdded>0">+<span x-text="goldAdded"></span>🟡 </span>
+            <span x-show="waterAdded>0">+<span x-text="waterAdded"></span>💧 </span>
+            +<span x-text="rubiesAdded"></span>♦
+          </div>
+        </template>
+        <template x-if="result==='lose'">
+          <div class="result-sub">El equipo cayó en batalla</div>
+        </template>
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="result-stat-val" x-text="battleStats.dmg"></div>
+            <div class="result-stat-lbl">DMG TOTAL</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-val" x-text="battleStats.crits"></div>
+            <div class="result-stat-lbl">CRÍTICOS</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-val" x-text="battleStats.efx"></div>
+            <div class="result-stat-lbl">EFECTOS</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-val" x-text="battleStats.turns"></div>
+            <div class="result-stat-lbl">TURNOS</div>
+          </div>
+        </div>
+        <template x-if="mvpHero()">
+          <div class="result-mvp">
+            ⭐ MVP: <span x-text="mvpHero().emoji+' '+mvpHero().name"></span>
+            (<span x-text="mvpHero().dmg"></span> dmg)
+          </div>
+        </template>
+        <button class="btn-return" @click="exitBattle()">← VOLVER</button>
+        </div>
+      </template>
+
       </div>
     </div>
 
@@ -1039,7 +1200,12 @@ button{font-family:var(--font-h);}
 
     <div id="blog">
       <template x-for="(l,i) in log" :key="i">
-        <div :style="l.s" x-text="l.t"></div>
+        <template x-if="l.type==='sep'">
+          <hr class="log-sep">
+        </template>
+        <template x-if="l.type!=='sep'">
+          <div :style="l.s" :class="l.type?'log-'+l.type:''" x-text="l.t"></div>
+        </template>
       </template>
     </div>
     <div id="mvbtns">
@@ -1822,6 +1988,69 @@ button{font-family:var(--font-h);}
     </div>
   </div>
 
+  <!-- ══════════ CAMPAÑA MAP ══════════ -->
+  <div class="screen" :class="{on:screen==='campaign'}">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <button @click="abandonCampaign()"
+        style="display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--font-h);font-size:9px;letter-spacing:2px;cursor:pointer;padding:0">
+        ‹ ABANDONAR
+      </button>
+      <div style="font-family:var(--font-h);font-size:9px;letter-spacing:2px;color:var(--muted)">SALA <span x-text="campaignRoom+1"></span>/5</div>
+    </div>
+    <div class="stitle">🗺️ Mazmorra</div>
+
+    <!-- Mapa de salas -->
+    <div class="camp-map">
+      <template x-for="(r,i) in campaignRooms" :key="i">
+        <div style="display:flex;align-items:center">
+          <div class="camp-room"
+            :class="i===4?'boss-room '+(i===campaignRoom?'current':campaignRooms[i]==='win'?'done':'locked'):(i===campaignRoom?'current':campaignRooms[i]==='win'?'done':i<campaignRoom?'done':'locked')">
+            <div class="camp-room-emoji" x-text="campaignRooms[i]==='win'?'✓':(i===campaignRoom?(i===4?'👑':'⚔️'):(i===4?'💀':'🚪'))"></div>
+            <div class="camp-room-lbl" x-text="i===4?'JEFE':'SALA '+(i+1)"></div>
+          </div>
+          <div x-show="i<4" class="camp-connector" :class="campaignRooms[i]==='win'?'done':''"></div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Estado de héroes -->
+    <div style="font-family:var(--font-h);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px">EQUIPO</div>
+    <div class="camp-hero-row">
+      <template x-for="(h,i) in _campaignHeroDisplay()" :key="i">
+        <div class="camp-hero-card" :class="h.hp<=0?'camp-hero-dead':''">
+          <div style="font-size:20px;text-align:center;margin-bottom:3px" x-text="h.emoji"></div>
+          <div class="camp-hero-nm" x-text="h.name"></div>
+          <div class="hp-wrap" style="margin-bottom:2px">
+            <div class="hp-bar" :class="h.hp<=0?'hp-lo':hpCls(h.hp,h.maxHp)" :style="'width:'+pct(h.hp,h.maxHp)+'%'"></div>
+          </div>
+          <div style="font-size:9px;color:var(--muted);text-align:center" x-text="h.hp<=0?'CAÍDO':Math.floor(h.hp)+'/'+h.maxHp"></div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Info sala actual -->
+    <div style="background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;margin-bottom:10px">
+      <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:5px">SALA ACTUAL</div>
+      <div style="font-size:12px;color:var(--text)" x-text="campaignRoom===4?'👑 Batalla final contra el Jefe de la Mazmorra':'⚔️ Sala '+(campaignRoom+1)+' — Enemigo aleatorio Nv.'+((_maxHeroLvl()||1)+campaignRoom)"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">
+        <span x-show="campaignRoom<4">💚 Recuperas 25% HP al superar esta sala</span>
+        <span x-show="campaignRoom===4" style="color:#f87171">⚠️ Sin recuperación — stats +10% · Recompensa doble</span>
+      </div>
+    </div>
+
+    <!-- Recompensas acumuladas -->
+    <div x-show="campaignGoldEarned>0||campaignWaterEarned>0" style="background:rgba(232,196,106,.06);border:1px solid rgba(232,196,106,.18);border-radius:var(--r);padding:8px 13px;margin-bottom:10px;font-size:11px">
+      <span style="font-family:var(--font-h);font-size:9px;color:var(--muted);letter-spacing:1px">ACUMULADO: </span>
+      <span x-show="campaignGoldEarned>0" style="color:var(--gold)">+<span x-text="campaignGoldEarned"></span>🟡 </span>
+      <span x-show="campaignWaterEarned>0" style="color:var(--water)">+<span x-text="campaignWaterEarned"></span>💧</span>
+    </div>
+
+    <button class="btn-atk" style="background:rgba(192,132,252,.12);border-color:rgba(192,132,252,.35);color:#c084fc;letter-spacing:2px"
+      @click="enterCampaignRoom()">
+      <span x-text="campaignRoom===4?'👑 ENFRENTARSE AL JEFE':'⚔️ ENTRAR EN SALA '+(campaignRoom+1)"></span>
+    </button>
+  </div>
+
   <!-- ══════════ CHAMÁN ══════════ -->
   <div class="screen" :class="{on:screen==='shaman'}">
     <button @click="screen='village'"
@@ -1941,6 +2170,15 @@ function G() { return {
   showTutorial:false, tutPage:0, showSaveMenu:false, showMissions:false, missionsTab:'daily',
   achievementProgress:{}, achievementClaimed:{},
   openEffect:null, openLabHero:null,
+
+  // ── CAMPAIGN STATE ───────────────────────────────────────────
+  campaignActive:false,
+  campaignRoom:0,
+  campaignRooms:[null,null,null,null,null],
+  campaignHeroes:null,
+  campaignGoldEarned:0,
+  campaignWaterEarned:0,
+  campaignRubiesEarned:0,
   lvls:{ core:1, mine:1, well:1, storage:1, tank:1, lab:1, shaman:0, kCamp:1, aCamp:1, dCamp:1, mCamp:1, sCamp:1, oCamp:1, miCamp:1, gCamp:1, ppCamp:1, piCamp:1, hwCamp:1, drCamp:1, hCamp:1, vsCamp:1 },
   heroLvls:{ kCamp:1, aCamp:1, dCamp:1, mCamp:1, sCamp:1, oCamp:1, miCamp:1, gCamp:1, ppCamp:1, piCamp:1, hwCamp:1, drCamp:1, hCamp:1, vsCamp:1 },
   heroMoves:{ kCamp:{unlocked:[],equipped:[]}, aCamp:{unlocked:[],equipped:[]}, dCamp:{unlocked:[],equipped:[]}, mCamp:{unlocked:[],equipped:[]}, sCamp:{unlocked:[],equipped:[]}, oCamp:{unlocked:[],equipped:[]}, miCamp:{unlocked:[],equipped:[]}, gCamp:{unlocked:[],equipped:[]}, ppCamp:{unlocked:[],equipped:[]}, piCamp:{unlocked:[],equipped:[]}, hwCamp:{unlocked:[],equipped:[]}, drCamp:{unlocked:[],equipped:[]}, hCamp:{unlocked:[],equipped:[]}, vsCamp:{unlocked:[],equipped:[]} },
@@ -2981,8 +3219,8 @@ function G() { return {
     if(frozenFx){ this.activeEffects.enemy.push({...frozenFx}); this._log(`🧊 ¡El entrante ${e.name} hereda la congelación!`,'color:#7dd3fc'); }
     const pos  = idx + 1;
     const wave = this.waveTotal > 1 ? ` (${pos}/${this.waveTotal})` : '';
-    if(e.isBoss) this._log(`💀 ¡¡JEFE!! ${e.name} Nv.${e.level} — Stats +10%`,'color:#f87171');
-    else         this._log(`⚔️ ¡${e.name} Nv.${e.level} aparece${wave}!`,'color:var(--gold)');
+    if(e.isBoss) this._log(`💀 ¡¡JEFE!! ${e.name} Nv.${e.level} — Stats +10%`,'color:#f87171','room');
+    else         this._log(`⚔️ ¡${e.name} Nv.${e.level} aparece${wave}!`,'color:var(--gold)','room');
     this.waiting = true;
   },
   _clearPFx(){
@@ -3222,13 +3460,13 @@ function G() { return {
     const h=this.AF();
     if(playerDied || (h&&h.hp<=0)){
       if(h) h.hp=0;
-      this._log(`💀 ${h?.name||'Héroe'} ha caído por daño de estado!`,'color:var(--danger)');
+      this._log(`💀 ${h?.name||'Héroe'} ha caído por daño de estado!`,'color:var(--danger)','death');
       if(!this._heroFallen(()=>{ if(!this._ended) applyDots('enemy'); })) return;
     }
     if(this._ended) return;
     applyDots('enemy');
   },
-  _log(t,s=''){ this.log.push({t,s}); this.$nextTick(()=>{ const el=document.getElementById('blog'); if(el) el.scrollTop=el.scrollHeight; }); },
+  _log(t,s='',type=''){ this.log.push({t,s,type}); this.$nextTick(()=>{ const el=document.getElementById('blog'); if(el) el.scrollTop=el.scrollHeight; }); },
   _dmg(power,atk,def,lvl,critChance=0.0625){ if(power<=0) return {dmg:0,crit:false}; const rand=0.85+Math.random()*0.15; const crit=Math.random()<critChance; const dmg=Math.max(1,Math.floor(((2*lvl/5+2)*power*(atk/Math.max(def,1))/50+2)*(crit?1.5:1)*rand)); return {dmg,crit}; },
   switchHero(i){
     if(this.anim||(!this.waiting&&!this.forcedSwitch)||this._ended) return;
@@ -3303,7 +3541,7 @@ function G() { return {
     if(this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
     const h=this.AF();
     if(h&&h.hp<=0){
-      h.hp=0; this._log(`💀 ${h.name} ha caído por daño de estado!`,'color:var(--danger)');
+      h.hp=0; this._log(`💀 ${h.name} ha caído por daño de estado!`,'color:var(--danger)','death');
       const contAfterDeath = () => this._endTurnTick();
       if(!this._heroFallen(contAfterDeath)) return;
     }
@@ -3351,6 +3589,7 @@ function G() { return {
       }
     }
     this._tickEffects();
+    this._log('','','sep');
     this.anim=false; this.waiting=true;
   },
   // ══════════════════════════════════════════════════════════════
@@ -3377,7 +3616,7 @@ function G() { return {
     const defDefeated = (cont) => {
       if(isP){ this.bat.eHp=0; this._playerDotsOnly(); this._win(); return false; }
       defHero.hp=0;
-      this._log(`💀 ${defHero.name} ha caído!`,'color:var(--danger)');
+      this._log(`💀 ${defHero.name} ha caído!`,'color:var(--danger)','death');
       return this._heroFallen(cont);
     };
 
@@ -3401,7 +3640,7 @@ function G() { return {
       const selfDmg=Math.max(1,Math.floor(aMaxHp*0.15));
       setAHp(Math.max(0,getAHp()-selfDmg));
       this._log(`💫 ¡${atker.name} está aturdido y se golpea a sí mismo! -${selfDmg} HP`,'color:#facc15');
-      if(isP&&atker.hp<=0){ atker.hp=0; this._log(`💀 ${atker.name} ha caído!`,'color:var(--danger)'); if(!this._heroFallen(cb)) return; }
+      if(isP&&atker.hp<=0){ atker.hp=0; this._log(`💀 ${atker.name} ha caído!`,'color:var(--danger)','death'); if(!this._heroFallen(cb)) return; }
       if(!isP&&this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
       setTimeout(cb,700); return;
     }
@@ -3828,7 +4067,8 @@ function G() { return {
     let finalDmg = absorbShield(dmg);
     setDHp(Math.max(0, getDHp()-finalDmg));
     this._log(`${atker.name} → ${move.name}: -${finalDmg} HP${crit?' 💥 ¡CRÍTICO!':''}`,
-      crit?'color:var(--gold)':(isP?'':'color:var(--danger)'));
+      crit?'color:var(--gold)':(isP?'':'color:var(--danger)'),
+      crit?'crit':'');
     floatDef('-'+finalDmg, isSp ? '#60a5fa' : '#f87171');
 
     if(isP){
@@ -4087,6 +4327,12 @@ function G() { return {
   _roundWin(){
     if(this._ended) return; this._ended=true;
 
+    // ── CAMPAÑA ──────────────────────────────────────────────────
+    if(this.bat?.isCampaign){
+      this._handleCampaignRoomWin();
+      return;
+    }
+
     // ── INVASIÓN ─────────────────────────────────────────────────
     if(this.bat?.isInvasion){
       this.invasionBattle = false;
@@ -4138,6 +4384,10 @@ function G() { return {
   },
   _lose(){
     if(this._ended) return; this._ended=true;
+    if(this.bat?.isCampaign){
+      this.campaignActive = false;
+      this.result='campaign_lose'; this.waiting=false; this.anim=false; return;
+    }
     if(this.bat?.isInvasion){
       this.invasionBattle = false;
       const lostGold  = Math.floor(this.gold  * 0.5);
@@ -4150,6 +4400,7 @@ function G() { return {
     this.result='lose'; this.waiting=false; this.anim=false;
   },
   exitBattle(){ this.invasionBattle = false; this.screen='village'; },
+  exitCampaign(){ this.campaignActive=false; this.result=null; this.screen='village'; },
 
   exportSave(){
     this.save(); const data=localStorage.getItem('hq_v2'); if(!data) return this.notif('No hay progreso','#f97316');
@@ -4183,6 +4434,124 @@ function G() { return {
   },
   resetGame(){ this.showReset=true; },
   confirmReset(){ localStorage.removeItem('hq_v2'); localStorage.removeItem('hq_v1'); location.reload(); },
+
+  // ── CAMPAIGN LOGIC ───────────────────────────────────────────
+  startCampaign(){
+    if(!this.team.length) return this.notif('Añade héroes al equipo','#f97316');
+    this.campaignActive = true;
+    this.campaignRoom = 0;
+    this.campaignRooms = [null,null,null,null,null];
+    this.campaignHeroes = null;
+    this.campaignGoldEarned = 0;
+    this.campaignWaterEarned = 0;
+    this.campaignRubiesEarned = 0;
+    this.screen = 'campaign';
+  },
+  abandonCampaign(){
+    this.campaignActive = false;
+    this.result = null;
+    this.screen = 'village';
+  },
+  enterCampaignRoom(){
+    this.screen = 'combat';
+    this._initCampaignBattle(this.campaignRoom);
+  },
+  nextCampaignRoom(){
+    this.result = null;
+    this.screen = 'campaign';
+  },
+  _campaignHeroDisplay(){
+    if(this.campaignHeroes) return this.campaignHeroes;
+    // Before first room: show from team
+    return this.team.map(hid=>{
+      const cs=this.calcStats(hid); const h=this.HD[hid];
+      return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, hp:cs.hp, maxHp:cs.hp };
+    });
+  },
+  _buildCampaignWave(roomIdx){
+    const heroLvl = this._maxHeroLvl();
+    const isBoss = roomIdx === 4;
+    if(isBoss){
+      const boss = this._buildBossEnemy();
+      boss.currentHp = boss.hp;
+      return [boss];
+    }
+    const lvl = Math.max(1, heroLvl + roomIdx);
+    const campId = this.ENEMY_POOL[Math.floor(Math.random()*this.ENEMY_POOL.length)];
+    const e = this._buildEnemy(campId, lvl);
+    e.currentHp = e.hp;
+    return [e];
+  },
+  _initCampaignBattle(roomIdx){
+    const isBoss = roomIdx === 4;
+    this._ended=false; this.result=null; this.log=[]; this.activeIdx=0;
+    this.switching=false; this.forcedSwitch=false; this.pAnim='idle'; this.eAnim='eidle';
+    this.activeEffects={ player:[], enemy:[] };
+    this.waveQueue = this._buildCampaignWave(roomIdx);
+    this.waveTotal = this.waveQueue.length;
+    // Build or restore heroes
+    let heroes;
+    if(this.campaignHeroes && roomIdx > 0){
+      heroes = this.campaignHeroes.map(h=>({...h}));
+    } else {
+      heroes = this.team.map(hid=>{
+        const h=this.HD[hid]; const cs=this.calcStats(hid);
+        return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, moves:this.heroMoves[hid]?.equipped||[], level:this.heroLvls[hid]||1, hp:cs.hp, maxHp:cs.hp, atk:cs.atk, def:cs.def, spatk:cs.spatk, spdef:cs.spdef, spd:cs.spd };
+      });
+    }
+    const firstAlive = heroes.findIndex(h=>h.hp>0);
+    if(firstAlive===-1){ this.notif('Todos los héroes han caído','#f87171'); this.abandonCampaign(); return; }
+    this.activeIdx = firstAlive;
+    this.bat={
+      eHp:0, eMax:0, cooldowns:{}, swapCb:null, goblinFielded:false, goblinDmgCount:0, goblinEnemyDmgCount:0, enemyLastPlayerSetup:false, activeEnemyIdx:0, enemySwitchCd:0, lastEnemyMoveUsed:null,
+      protectionCd:{player:0,enemy:0}, freezeImmune:{player:0,enemy:0}, heroDecomp:{}, flinched:{player:false,enemy:false}, parryActive:false, deathCb:null,
+      redistData:null, receivedSpecialDmg:false, lastEnemyDmg:0, reboteRawDmg:0, reboteType:'physical',
+      cigarroData:null, caraoCruzData:null, cagonTransfer:null, sinfoniaTransfer:false,
+      isBossRound:isBoss, isInvasion:false, isCampaign:true,
+      heroes
+    };
+    this.battleStats={ dmg:0, crits:0, efx:0, turns:0, heroContrib:{} };
+    for(const hid of this.team) this.battleStats.heroContrib[hid]=0;
+    if(this.bat.heroes[this.activeIdx]?.id==='gCamp') this.bat.goblinFielded=true;
+    const roomLbl = isBoss ? `👑 SALA 5/5 — BATALLA FINAL` : `🗺️ MAZMORRA — SALA ${roomIdx+1}/5`;
+    this._log(roomLbl,'color:#c084fc','room');
+    this._loadEnemy(0);
+  },
+  _healCampaignHeroes(){
+    const healed = this.bat.heroes.map(h=>({
+      ...h,
+      hp: h.hp>0 ? Math.min(h.maxHp, Math.floor(h.hp + h.maxHp*0.25)) : 0
+    }));
+    this.campaignHeroes = healed;
+  },
+  _handleCampaignRoomWin(){
+    const eLvl = this.waveQueue[0]?.level || 1;
+    const roomReward = Math.floor((40 + eLvl*4 + eLvl*eLvl*1.5) * 2); // ×2 vs normal
+    const goblinBonus = this.bat?.goblinFielded ? 1.3 : 1.0;
+    const finalReward = Math.floor(roomReward * goblinBonus);
+    this.goldAdded  = this.gold  < this.maxGold  ? Math.min(finalReward, this.maxGold  - this.gold)  : 0;
+    this.waterAdded = this.water < this.maxWater ? Math.min(finalReward, this.maxWater - this.water) : 0;
+    this.gold  = Math.min(this.gold  + this.goldAdded,  this.maxGold);
+    this.water = Math.min(this.water + this.waterAdded, this.maxWater);
+    this.campaignGoldEarned  += this.goldAdded;
+    this.campaignWaterEarned += this.waterAdded;
+    this.campaignRooms[this.campaignRoom] = 'win';
+    if(this.campaignRoom === 4){
+      // ¡Mazmorra completada!
+      const bonusRubies = 5;
+      this.rubies += bonusRubies;
+      this.campaignRubiesEarned = bonusRubies;
+      this.wins++; this.bossWins++; this.checkAchievements();
+      this.trackMission('wins');
+      this._log(`🏆 ¡MAZMORRA COMPLETADA! +${bonusRubies}♦ bonus`,'color:var(--gold)','room');
+      this.result='campaign_win'; this.waiting=false; this.anim=false; this.save();
+    } else {
+      this._healCampaignHeroes();
+      this.campaignRoom++;
+      this._log(`💚 Sala ${this.campaignRoom} superada — +25% HP recuperado`,'color:#4ade80','room');
+      this.result='campaign_room'; this.waiting=false; this.anim=false; this.save();
+    }
+  },
 
   _float(txt,xPct,yPct,color){
     const el=document.createElement('div'); el.className='float'; el.style.color=color;
