@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Heroes Quest V143</title>
+<title>Heroes Quest V148</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1025,8 +1025,12 @@ button{font-family:var(--font-h);}
     <div class="stitle">Héroes</div>
 
     <!-- EQUIPO ACTIVO -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1.5px;color:var(--muted)">EQUIPO</span>
+      <span style="font-family:var(--font-h);font-size:9px;padding:2px 8px;border-radius:10px;background:rgba(232,196,106,.12);border:1px solid rgba(232,196,106,.25);color:var(--gold)"><span x-text="team.length"></span>/4</span>
+    </div>
     <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
-      <template x-for="slot in [0,1,2]" :key="slot">
+      <template x-for="slot in [0,1,2,3]" :key="slot">
         <template x-if="team[slot]">
           <div style="border-radius:12px;border:1px solid rgba(232,196,106,.3);background:linear-gradient(135deg,rgba(232,196,106,.07),rgba(255,255,255,.02));padding:12px 14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden">
             <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,rgba(232,196,106,.8),rgba(232,196,106,.2));border-radius:3px 0 0 3px"></div>
@@ -1040,7 +1044,7 @@ button{font-family:var(--font-h);}
               <div style="font-size:10px;color:var(--muted);margin-top:1px">Nv.<span style="color:var(--gold);font-weight:600" x-text="heroLvls[team[slot]]"></span><span style="margin-left:6px">SPD <span x-text="HD[team[slot]].stats.spd"></span></span></div>
               <div style="margin-top:6px;display:flex;gap:3px;align-items:center">
                 <template x-for="[stat,color] in [['atk','#f87171'],['def','#60a5fa'],['spd','#4ade80'],['spatk','#c084fc']]" :key="stat">
-                  <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden"><div :style="'height:100%;border-radius:2px;background:'+color+';width:'+Math.min(100,Math.round(HD[team[slot]].stats[stat]/1.5))+'%'"></div></div>
+                  <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden"><div :style="'height:100%;border-radius:2px;background:'+color+';width:'+Math.min(100,Math.round((HD[team[slot]]?.stats?.[stat]??0)/1.5))+'%'"></div></div>
                 </template>
               </div>
             </div>
@@ -1085,8 +1089,8 @@ button{font-family:var(--font-h);}
       </div>
     </div>
 
-    <!-- STATS DE HÉROES -->
-    <div class="stitle" style="margin-top:6px">Stats</div>
+    <!-- INFORMACIÓN DE HÉROES -->
+    <div class="stitle" style="margin-top:6px">Información de Héroes</div>
     <template x-for="hid in CAMPS.filter(h=>HD[h].unlocked)" :key="hid">
       <div class="hinfo" style="padding:0;overflow:hidden;margin-bottom:10px">
         <div style="display:flex;align-items:center;border-bottom:1px solid var(--border);">
@@ -1140,56 +1144,46 @@ button{font-family:var(--font-h);}
 
     <!-- COMBATE -->
     <div class="card full" style="border-color:rgba(248,113,113,.2);background:linear-gradient(135deg,var(--surf),rgba(248,113,113,.03));margin-bottom:9px">
-      <div class="bcard-top" style="margin-bottom:8px">
-        <div class="bcard-ico">⚔️</div>
-        <div style="flex:1">
-          <div class="bcard-nm">Combate</div>
-          <div class="bcard-lv" style="color:var(--danger)">Ronda <span x-text="wins+1"></span></div>
-          <div class="bcard-sub">Oleadas de enemigos · Recompensas de oro y agua</div>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-family:var(--font-h);font-size:14px;letter-spacing:2px;color:var(--danger)">⚔️ COMBATES</span>
         <div style="text-align:right">
-          <div style="font-family:var(--font-h);font-size:9px;color:var(--muted)">VICTORIAS</div>
-          <div style="font-family:var(--font-h);font-size:18px;color:var(--gold)" x-text="wins"></div>
+          <div style="font-family:var(--font-h);font-size:8px;color:var(--muted)">VICTORIAS</div>
+          <div style="font-family:var(--font-h);font-size:14px;color:var(--gold);line-height:1.1" x-text="wins"></div>
         </div>
       </div>
+      <div style="font-family:var(--font-h);font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px">Ronda <span x-text="wins+1"></span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:9px">Oleadas de enemigos por rondas · Recompensas de recursos</div>
       <button class="btn-atk" @click="startBattle()" :disabled="team.length===0" style="margin-top:0">⚔️ ATACAR</button>
       <div x-show="team.length===0" style="text-align:center;font-size:10px;color:var(--muted);margin-top:6px">Añade héroes al equipo en la pestaña Héroes</div>
     </div>
 
     <!-- DUNGEON -->
     <div class="card full" style="border-color:rgba(232,196,106,.2);background:linear-gradient(135deg,var(--surf),rgba(232,196,106,.03));margin-bottom:9px;cursor:pointer" @click="screen='dungeon'">
-      <div class="bcard-top">
-        <div class="bcard-ico">🗺️</div>
-        <div style="flex:1">
-          <div class="bcard-nm">Mazmorras</div>
-          <template x-if="dungeonState">
-            <div>
-              <div class="bcard-lv" style="color:var(--gold)">
-                <span x-text="DUNGEONS.find(d=>d.id===dungeonState.biomeId)?.name"></span>
-                — Sala <span x-text="dungeonState.floor+1"></span>/<span x-text="dungeonState.map.length"></span>
-              </div>
-              <div class="bcard-sub">+<span x-text="dungeonState.goldEarned"></span>🟡 acumulados</div>
-            </div>
-          </template>
-          <template x-if="!dungeonState">
-            <div><div class="bcard-lv">5 biomas</div><div class="bcard-sub">HP persistente entre salas · Recompensas exclusivas</div></div>
-          </template>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-family:var(--font-h);font-size:14px;letter-spacing:2px;color:var(--gold)">🗺️ MAZMORRAS</span>
         <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)">Ver →</span>
       </div>
+      <template x-if="dungeonState">
+        <div style="font-family:var(--font-h);font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px">
+          <span x-text="DUNGEONS.find(d=>d.id===dungeonState.biomeId)?.name"></span>
+          · Sala <span x-text="dungeonState.floor+1"></span>/<span x-text="dungeonState.map.length"></span>
+          · +<span x-text="dungeonState.goldEarned"></span>🟡
+        </div>
+      </template>
+      <template x-if="!dungeonState">
+        <div style="font-family:var(--font-h);font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px">Sin partida activa</div>
+      </template>
+      <div style="font-size:11px;color:var(--muted)">Combates duros en diferentes lugares con recompensas exclusivas</div>
     </div>
 
     <!-- BESTIARIO -->
     <div class="card full" style="cursor:pointer" @click="screen='bestiary'">
-      <div class="bcard-top">
-        <div class="bcard-ico">📖</div>
-        <div style="flex:1">
-          <div class="bcard-nm">Bestiario</div>
-          <div class="bcard-lv">Bestiario</div>
-          <div class="bcard-sub">Stats y cómo desbloquear cada rival como héroe</div>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-family:var(--font-h);font-size:14px;letter-spacing:2px;color:var(--muted)">📖 BESTIARIO</span>
         <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)">Ver →</span>
       </div>
+      <div style="font-family:var(--font-h);font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px">Enemigos del juego</div>
+      <div style="font-size:11px;color:var(--muted)">Información de todos los enemigos</div>
     </div>
   </div>
 
@@ -1199,7 +1193,7 @@ button{font-family:var(--font-h);}
       style="display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--font-h);font-size:9px;letter-spacing:2px;cursor:pointer;padding:0;margin-bottom:14px">
       ‹ AVENTURA
     </button>
-    <div class="stitle">Bestiario</div>
+    <div class="stitle" style="color:#a78bfa">Bestiario</div>
     <template x-for="eid in ENEMY_POOL" :key="eid">
       <div class="hinfo" style="padding:0;overflow:hidden;margin-bottom:10px">
         <div style="display:flex;align-items:center;border-bottom:1px solid var(--border);">
@@ -1247,6 +1241,16 @@ button{font-family:var(--font-h);}
               </div>
             </template>
           </div>
+
+          <!-- Pasiva -->
+          <template x-if="HD[eid].passive">
+            <div style="padding:0 14px 10px">
+              <div style="padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+                <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+                <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD[eid].passive.desc"></div>
+              </div>
+            </div>
+          </template>
 
           <!-- Cómo conseguirlo como personaje jugable -->
           <div style="padding:8px 14px 12px;border-top:1px solid var(--border)">
@@ -1410,6 +1414,10 @@ button{font-family:var(--font-h);}
             <div class="sval" x-text="v"></div>
           </div>
         </template>
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+          <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD.mCamp.passive.desc"></div>
+        </div>
       </div>
     </div>
     <div class="card" style="border-color:rgba(74,222,128,.2);background:linear-gradient(135deg,var(--surf),rgba(74,222,128,.03));margin-bottom:9px;padding:0;overflow:hidden">
@@ -1440,6 +1448,10 @@ button{font-family:var(--font-h);}
             <div class="sval" x-text="v"></div>
           </div>
         </template>
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+          <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD.sCamp.passive.desc"></div>
+        </div>
       </div>
     </div>
     <div class="card" style="border-color:rgba(251,191,36,.2);background:linear-gradient(135deg,var(--surf),rgba(251,191,36,.03));margin-bottom:9px;padding:0;overflow:hidden">
@@ -1470,6 +1482,10 @@ button{font-family:var(--font-h);}
             <div class="sval" x-text="v"></div>
           </div>
         </template>
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+          <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD.miCamp.passive.desc"></div>
+        </div>
       </div>
     </div>
     <!-- HEMODUS -->
@@ -1501,6 +1517,10 @@ button{font-family:var(--font-h);}
             <div class="sval" x-text="v"></div>
           </div>
         </template>
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+          <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD.hCamp.passive.desc"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1630,15 +1650,27 @@ button{font-family:var(--font-h);}
         </div>
       </div>
       <!-- Tendencia -->
-      <div class="market-rate-trend">
-        <div class="trend-dot" :class="marketTrend.goldToWater>0?'up':marketTrend.goldToWater<0?'down':'neutral'"></div>
-        <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted)">
-          Tendencia: <span
-            :style="marketTrend.goldToWater>0?'color:#4ade80':marketTrend.goldToWater<0?'color:var(--danger)':'color:var(--muted)'"
-            x-text="marketTrend.goldToWater>0?'▲ AGUA AL ALZA':marketTrend.goldToWater<0?'▼ AGUA A LA BAJA':'→ MERCADO ESTABLE'">
+      <div class="market-rate-trend" style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="trend-dot" :class="marketTrend.goldToWater>0?'up':marketTrend.goldToWater<0?'down':'neutral'"></div>
+          <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted)">
+            💧 Agua: <span
+              :style="marketTrend.goldToWater>0?'color:#4ade80':marketTrend.goldToWater<0?'color:var(--danger)':'color:var(--muted)'"
+              x-text="marketTrend.goldToWater>0?'▲ AL ALZA':marketTrend.goldToWater<0?'▼ A LA BAJA':'→ ESTABLE'">
+            </span>
           </span>
-        </span>
-        <div class="trend-dot" :class="marketTrend.goldToWater>0?'up':marketTrend.goldToWater<0?'down':'neutral'"></div>
+          <div class="trend-dot" :class="marketTrend.goldToWater>0?'up':marketTrend.goldToWater<0?'down':'neutral'"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="trend-dot" :class="marketTrend.waterToGold>0?'up':marketTrend.waterToGold<0?'down':'neutral'"></div>
+          <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted)">
+            🟡 Oro: <span
+              :style="marketTrend.waterToGold>0?'color:#4ade80':marketTrend.waterToGold<0?'color:var(--danger)':'color:var(--muted)'"
+              x-text="marketTrend.waterToGold>0?'▲ AL ALZA':marketTrend.waterToGold<0?'▼ A LA BAJA':'→ ESTABLE'">
+            </span>
+          </span>
+          <div class="trend-dot" :class="marketTrend.waterToGold>0?'up':marketTrend.waterToGold<0?'down':'neutral'"></div>
+        </div>
       </div>
     </div>
 
@@ -1917,7 +1949,7 @@ button{font-family:var(--font-h);}
           <div class="tut-divider"></div>
           <div class="tut-section">
             <div class="tut-section-title">💀 Invasiones</div>
-            <p class="tut-p">Evento especial: 4 enemigos a la vez al nivel de tu héroe más alto +1. <span class="hl" style="color:#4ade80">Ganar</span> da recompensa masiva +3♦. <span class="hl" style="color:#fb923c">Perder</span> pierdes el 50% de recursos. <span class="hl" style="color:#f87171">Ignorar</span> pierdes todos los recursos.</p>
+            <p class="tut-p">Evento especial: tantos enemigos como héroes en tu equipo +1, al nivel de tu héroe más alto +1. <span class="hl" style="color:#4ade80">Ganar</span> da recompensa masiva +3♦. <span class="hl" style="color:#fb923c">Perder</span> pierdes el 50% de recursos. <span class="hl" style="color:#f87171">Ignorar</span> pierdes todos los recursos.</p>
           </div>
         </div>
 
@@ -2039,11 +2071,22 @@ button{font-family:var(--font-h);}
             </div>
 
             <!-- Stats resultado -->
-            <div style="padding:10px 13px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap">
+            <div style="padding:10px 13px;border-bottom:1px solid var(--border)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+                <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted)">STATS BASE</span>
+                <span style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted)" x-text="'TOTAL: '+Object.values(HD[fusion.result].stats).reduce((a,b)=>a+b,0)"></span>
+              </div>
               <template x-for="[k,v] in Object.entries(HD[fusion.result].stats)" :key="k">
-                <div style="display:flex;flex-direction:column;align-items:center;min-width:36px">
-                  <div style="font-family:var(--font-h);font-size:8px;letter-spacing:1px" :style="`color:${SC[k]}`" x-text="SL[k]"></div>
-                  <div style="font-size:12px;font-weight:700" :style="`color:${SC[k]}`" x-text="v"></div>
+                <div class="srow">
+                  <div class="slabel" x-text="SL[k]"></div>
+                  <div class="sbg"><div class="sbar" :style="'width:'+(v/200*100)+'%;background:'+SC[k]"></div></div>
+                  <div class="sval" x-text="v"></div>
+                </div>
+              </template>
+              <template x-if="HD[fusion.result].passive">
+                <div style="margin-top:10px;padding:8px 10px;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);border-left:3px solid #facc15;border-radius:6px">
+                  <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:#facc15;margin-bottom:3px">⚡ PASIVA</div>
+                  <div style="font-size:11px;color:var(--text);line-height:1.5" x-text="HD[fusion.result].passive.desc"></div>
                 </div>
               </template>
             </div>
@@ -2122,7 +2165,7 @@ function G() { return {
   // ── MERCADO STATE ────────────────────────────────────────────
   marketRate:{ goldToWater:1.0, waterToGold:1.0 },
   marketRateHistory:[],
-  marketTrend:{ goldToWater:0 },
+  marketTrend:{ goldToWater:0, waterToGold:0 },
   marketRateCountdown:30,
   marketInputGold:0,
   marketInputWater:0,
@@ -2207,7 +2250,7 @@ function G() { return {
     dCamp: { name:'Lobo',                 emoji:'🐺',  unlocked:true,  stats:{ hp:80,  atk:115, def:60,  spatk:60, spdef:70, spd:115 }, passive:{ id:'wolf_hunt',           desc:'Instinto de caza: Si el objetivo tiene el 50% o menos de su HP máximo, los movimientos físicos hacen un 20% de daño extra.' } },
     mCamp: { name:'Mago',                 emoji:'🧙',  unlocked:false, stats:{ hp:70,  atk:40,  def:50,  spatk:130,spdef:95, spd:100 }, passive:{ id:'mage_concentration',   desc:'Concentración mágica: El primer movimiento que golpee al objetivo hace un 20% de daño extra. Este efecto desaparece hasta que el Mago se retire, vuelva a entrar en combate y se enfrente a un objetivo diferente.' } },
     sCamp: { name:'Slime Colosal',        emoji:'🟢',  unlocked:false, stats:{ hp:200, atk:45,  def:60,  spatk:45, spdef:60, spd:30  }, passive:{ id:'slime_absorb',        desc:'Absorción: Inmune a los golpes críticos. Si recibe un crítico, hace daño normal y el daño extra del crítico se convierte en curación.' } },
-    oCamp: { name:'Orco',                 emoji:'🧌',  unlocked:false, stats:{ hp:120, atk:125, def:75,  spatk:35, spdef:85, spd:60  }, passive:{ id:'orc_armorbreak',       desc:'Rompe armaduras: Si quita el 30% o más del HP máximo del objetivo de un golpe, aplica Defensa- un 35% durante 2 turnos.' } },
+    oCamp: { name:'Orco',                 emoji:'🧌',  unlocked:false, stats:{ hp:120, atk:125, def:75,  spatk:35, spdef:85, spd:60  }, passive:{ id:'orc_armorbreak',       desc:'Rompe armaduras: Si quita el 40% o más del HP máximo del objetivo de un golpe, aplica Defensa- un 35% durante 2 turnos.' } },
     miCamp:{ name:'Mímico',              emoji:'🪆',  unlocked:false, stats:{ hp:70,  atk:90,  def:80,  spatk:95, spdef:80, spd:85  }, passive:{ id:'mimic_deceive',        desc:'Maestro del engaño: Cada vez que usa un movimiento de estado, aumenta Defensa+ y Defensa especial+ un 35% durante 3 turnos.' } },
     gCamp: { name:'Goblin',               emoji:'👺',  unlocked:false, stats:{ hp:65,  atk:95,  def:60,  spatk:70, spdef:60, spd:130 }, passive:{ id:'goblin_gitaneo',       desc:'Gitaneo: El cuarto movimiento de daño siempre asestará un golpe crítico. Recauda un 30% de oro extra de todos los combates si está en el equipo.' } },
     ppCamp:{ name:'Precursor de la Peste',emoji:'🐦‍⬛', unlocked:false, stats:{ hp:80,  atk:60,  def:75,  spatk:90, spdef:90, spd:95  }, passive:{ id:'pest_contagio',       desc:'Contagio: Cuando el objetivo muere con al menos 2 efectos negativos activos, esos efectos se transfieren al siguiente objetivo con la mitad de turnos restantes. El Precursor debe estar en campo sin morir.' } },
@@ -2309,7 +2352,7 @@ function G() { return {
     'a_celestial':     { name:'Flechazo Celestial',  power:170, type:'special',  precision:0.80, desc:'Utiliza una flecha mágica para lanzar un potentísimo disparo al objetivo.', effects:[], heroLvl:35, labLvl:5, cost:280 },
     // ── LOBO ─────────────────────────────────────────────────────
     'd_mordisco':      { name:'Mordisco',            power:80,  type:'physical', precision:0.95, desc:'Muerde al objetivo y le baja un 35% de defensa, 4 turnos.', effects:[{id:'def_down',target:'enemy',turns:4}], heroLvl:1, labLvl:1, cost:50 },
-    'd_aullido':       { name:'Aullido aterrador',   power:0,   type:'status',   precision:1.00, desc:'Aullido que baja el ataque al objetivo un 40%, 5 turnos.', effects:[{id:'atk_down',target:'enemy',turns:5}], heroLvl:5, labLvl:2, cost:75 },
+    'd_aullido':       { name:'Aullido aterrador',   power:0,   type:'status',   precision:1.00, desc:'Aullido que baja el ataque y el ataque especial al objetivo un 40%, 5 turnos.', effects:[{id:'atk_down',target:'enemy',turns:5},{id:'spatk_down',target:'enemy',turns:5}], heroLvl:5, labLvl:2, cost:75 },
     'd_desgarradora':  { name:'Mordida desgarradora',power:85,  type:'physical', precision:0.90, desc:'Mordisco que desgarra al objetivo y le causa sangrado, 3 turnos.', effects:[{id:'bleed',target:'enemy',turns:3}], heroLvl:10, labLvl:2, cost:100 },
     'd_pelaje':        { name:'Cambio de pelaje',    power:0,   type:'status',   precision:1.00, desc:'Cambia su pelaje para fortalecerse y aumentar sus defensas, 4 turnos.', effects:[{id:'def_up',target:'self',turns:4},{id:'spdef_up',target:'self',turns:4}], heroLvl:15, labLvl:3, cost:120 },
     'd_instinto':      { name:'Instinto depredador', power:0,   type:'status',   precision:1.00, desc:'Saca su instinto para aumentar el índice de crítico un 50%, 7 turnos.', effects:[{id:'crit_up',target:'self',turns:7}], heroLvl:20, labLvl:3, cost:150 },
@@ -2405,7 +2448,11 @@ function G() { return {
 
   _heroLvl(hid, mvKey){ return this.MD[mvKey]?.heroLvl ?? 1; },
 
-  ENEMY_POOL: ['oCamp','miCamp','gCamp','ppCamp','hCamp'],
+  ENEMY_POOLS: {
+    combat:   ['oCamp','miCamp','gCamp','ppCamp','hCamp'],
+    dungeon:  ['oCamp','miCamp','gCamp','ppCamp','hCamp'],
+  },
+  get ENEMY_POOL(){ return this.ENEMY_POOLS.combat; },
   DUNGEONS:[
     {id:'d_forest',   name:'Bosque Sombrío',           emoji:'🌲', coreReq:1, rooms:5,  lvlOffset:0, eliteBoost:1.20, bossBoost:1.30, rewardMult:1.0, completionRubies:3},
     {id:'d_catacombs',name:'Catacumbas Olvidadas',      emoji:'⚰️', coreReq:2, rooms:7,  lvlOffset:2, eliteBoost:1.25, bossBoost:1.35, rewardMult:1.4, completionRubies:4},
@@ -2506,6 +2553,7 @@ function G() { return {
     const prev = { ...this.marketRate };
     const next = this._generateMarketRate();
     this.marketTrend.goldToWater = next.goldToWater > prev.goldToWater ? 1 : next.goldToWater < prev.goldToWater ? -1 : 0;
+    this.marketTrend.waterToGold = next.waterToGold > prev.waterToGold ? 1 : next.waterToGold < prev.waterToGold ? -1 : 0;
     this.marketRate = next;
     this.marketRateHistory.push({ ...next });
     if(this.marketRateHistory.length > 20) this.marketRateHistory.shift();
@@ -2578,7 +2626,7 @@ function G() { return {
     {
       type:'invasion', emoji:'💀', tagLabel:'¡INVASIÓN!',
       title:'Horda de Invasores',
-      desc:'¡Una horda ataca tu aldea! 4 enemigos Nv. héroe+2. Ganar: recompensa masiva + 2♦. Perder: pierdes la mitad de recursos. Ignorar: pierdes todos tus recursos.',
+      desc:'¡Una horda ataca tu aldea! Tantos enemigos como héroes en tu equipo +1, al nivel de tu héroe más alto +1. Ganar: recompensa masiva + 2♦. Perder: pierdes la mitad de recursos. Ignorar: pierdes todos tus recursos.',
       acceptLabel:'⚔️ ¡DEFENDER!',
       bonusDesc:'Victoria: recompensa masiva + 2♦ · Derrota: -50% recursos',
       duration:25,
@@ -3042,8 +3090,9 @@ function G() { return {
     return 4;
   },
   _buildInvasionWave(){
-    const eLvl = this._maxHeroLvl() + 2;
-    return Array.from({length:4}, () => {
+    const eLvl  = this._maxHeroLvl() + 1;
+    const count = this.team.length + 1;
+    return Array.from({length:count}, () => {
       const campId = this.ENEMY_POOL[Math.floor(Math.random()*this.ENEMY_POOL.length)];
       const e = this._buildEnemy(campId, eLvl);
       e.currentHp = e.hp;
@@ -3146,7 +3195,7 @@ function G() { return {
     for(const h of this.bat.heroes) this.battleStats.heroContrib[h.id]=0;
     if(this.bat.heroes[0]?.id==='gCamp') this.bat.goblinFielded=true;
     if(bossRound) this._log(`👑 ¡RONDA JEFE! Ronda ${round}`,'color:#f87171');
-    if(this.invasionBattle) this._log(`💀 ¡INVASIÓN! 4 enemigos Nv.${this._maxHeroLvl()+1}`,'color:#f87171');
+    if(this.invasionBattle) this._log(`💀 ¡INVASIÓN! ${this.team.length+1} enemigos Nv.${this._maxHeroLvl()+1}`,'color:#f87171');
     if(this.dungeonBattle){ const room=this.dungeonState.map[dungeonFloor]; const total=this.dungeonState.map.length; this._log(`🗺️ Sala ${dungeonFloor+1}/${total} — ${room.type==='boss'?'👑 JEFE FINAL':room.type==='elite'?'💀 Élite':'⚔️ Combate'}`,'color:var(--gold)'); }
     this._loadEnemy(0);
     this._onHeroEnter();
@@ -4124,7 +4173,7 @@ function G() { return {
       // Pasiva Mago (Concentración mágica): consumir el bonus tras el primer golpe
       if(atker.id==='mCamp' && this.bat.magoFirstHitReady){ this.bat.magoFirstHitReady=false; this.bat.magoLastEnemyIdx=this.bat.activeEnemyIdx; }
       // Pasiva Orco (Rompe armaduras): si golpe ≥ 30% HP máx del objetivo, aplica DEF- 2t
-      if(atker.id==='oCamp' && finalDmg>0 && finalDmg >= this.bat.eMax*0.30){
+      if(atker.id==='oCamp' && finalDmg>0 && finalDmg >= this.bat.eMax*0.40){
         this._applyEffect('def_down','enemy',2,true);
         this._log(`🧌 Rompe armaduras: golpe ≥30% HP máx — Defensa- 2 turnos`,'color:#fb923c');
       }
@@ -4154,7 +4203,7 @@ function G() { return {
       // Pasiva Orco enemigo (Rompe armaduras): si golpe ≥ 30% HP máx del héroe activo, aplica DEF- 2t
       if(atker.id==='oCamp' && finalDmg>0){
         const defHeroMax = defHero.maxHp;
-        if(finalDmg >= defHeroMax*0.30){
+        if(finalDmg >= defHeroMax*0.40){
           this._applyEffect('def_down','player',2,false);
           this._log(`🧌 Rompe armaduras: golpe ≥30% HP máx — Defensa- 2 turnos`,'color:#fb923c');
         }
@@ -4394,7 +4443,7 @@ function G() { return {
     if(this.bat?.isInvasion){
       this.invasionBattle = false;
       const goblinBonus  = this.bat.goblinFielded ? 1.3 : 1.0;
-      const eLvl         = this._maxHeroLvl() + 2;
+      const eLvl         = this._maxHeroLvl() + 1;
       const invReward    = Math.floor((50 + eLvl*4 + eLvl*eLvl*2) * 4 * goblinBonus);
       this.goldAdded  = this.gold  < this.maxGold  ? Math.min(invReward, this.maxGold  - this.gold)  : 0;
       this.waterAdded = this.water < this.maxWater ? Math.min(invReward, this.maxWater - this.water) : 0;
