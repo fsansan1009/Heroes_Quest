@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Heroes Quest</title>
+<title>Heroes Quest V143</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -30,7 +30,7 @@
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:15px;}
 button{font-family:var(--font-h);}
 
-#app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;}
+#app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;overflow:hidden;}
 
 #topbar{
   display:flex;justify-content:space-between;align-items:center;
@@ -45,12 +45,12 @@ button{font-family:var(--font-h);}
 #nav{display:flex;background:var(--surf);border-top:1px solid var(--border);flex-shrink:0;}
 .nbtn{
   flex:1;padding:10px 0;text-align:center;border:none;background:transparent;
-  font-family:var(--font-h);font-size:9px;letter-spacing:2px;
+  font-family:var(--font-h);font-size:8px;letter-spacing:1px;
   color:var(--muted);cursor:pointer;text-transform:uppercase;transition:color .2s;
 }
 .nbtn.on{color:var(--gold);border-top:2px solid var(--gold);}
 
-.screen{display:none;flex:1;overflow-y:auto;padding:12px;}
+.screen{display:none;flex:1;min-height:0;overflow-y:auto;padding:12px;}
 .screen.on{display:block;}
 #cs.on{display:flex;}
 ::-webkit-scrollbar{width:3px;}
@@ -221,6 +221,7 @@ button{font-family:var(--font-h);}
 .hinfo-arr{font-size:9px;color:var(--muted);}
 .hinfo-name{font-family:var(--font-h);font-size:13px;letter-spacing:2px;}
 .hinfo-bst{font-size:11px;color:var(--muted);}
+.hinfo-body{border-top:1px solid var(--border);}
 .srow{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
 .slabel{font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted);width:48px;flex-shrink:0;}
 .sbg{flex:1;height:7px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
@@ -320,9 +321,6 @@ button{font-family:var(--font-h);}
 .mv-desc{font-size:11px;color:var(--text);line-height:1.5;margin-bottom:5px;}
 .mv-reqs{font-size:9px;color:var(--muted);margin-bottom:6px;font-family:var(--font-h);letter-spacing:1px;}
 
-.eff-row{display:flex;flex-wrap:wrap;gap:3px;min-height:15px;max-height:36px;overflow:hidden;margin-top:2px;}
-.eff-tag{font-size:11px;line-height:1.5;background:rgba(255,255,255,.08);border-radius:3px;padding:0 3px;}
-
 /* ── NOTIFICATIONS ─────────────────────────────────── */
 .reset-overlay{
   position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;
@@ -346,7 +344,7 @@ button{font-family:var(--font-h);}
 .tut-title{font-family:var(--font-h);font-size:12px;letter-spacing:2px;color:var(--gold);}
 .tut-close{background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px;border-radius:4px;}
 .tut-close:hover{color:var(--text);}
-.tut-body{flex:1;overflow-y:auto;padding:16px;}
+.tut-body{flex:1;min-height:0;overflow-y:auto;padding:16px;}
 .tut-page{display:none;}
 .tut-page.on{display:block;}
 .tut-section{margin-bottom:16px;}
@@ -534,65 +532,24 @@ button{font-family:var(--font-h);}
   background:rgba(0,0,0,.3);border-radius:8px;padding:10px 12px;margin-bottom:12px;
   border:1px solid rgba(255,255,255,.08);
 }
-
-/* ── CAMPAÑA / MAZMORRA ─────────────────────────────── */
-.camp-map{display:flex;align-items:center;justify-content:center;gap:0;padding:18px 8px;overflow-x:auto;}
-.camp-room{
-  width:56px;height:64px;border-radius:10px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;border:1px solid;
-  flex-shrink:0;transition:all .2s;
-}
-.camp-room-emoji{font-size:22px;line-height:1;}
-.camp-room-lbl{font-family:var(--font-h);font-size:7px;letter-spacing:.5px;color:var(--muted);}
-.camp-connector{
-  width:20px;height:2px;flex-shrink:0;border-radius:1px;
-  background:rgba(255,255,255,.08);position:relative;top:0;
-}
-.camp-connector.done{background:rgba(74,222,128,.35);}
-.camp-room.current{
-  background:rgba(232,196,106,.12);border-color:rgba(232,196,106,.5);
-  box-shadow:0 0 14px rgba(232,196,106,.2);
-}
-.camp-room.current .camp-room-lbl{color:var(--gold);}
-.camp-room.done{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.3);}
-.camp-room.done .camp-room-lbl{color:#4ade80;}
-.camp-room.locked{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.08);opacity:.45;}
-.camp-room.boss-room{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.4);}
-.camp-room.boss-room.current{box-shadow:0 0 14px rgba(248,113,113,.25);}
-.camp-room.boss-room .camp-room-lbl{color:#f87171;}
-.camp-hero-row{display:flex;gap:6px;padding:0 4px;margin-bottom:10px;}
-.camp-hero-card{
-  flex:1;background:var(--surf);border:1px solid var(--border);
-  border-radius:8px;padding:7px 9px;min-width:0;
-}
-.camp-hero-nm{font-family:var(--font-h);font-size:9px;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.camp-hero-dead{opacity:.35;}
-.btn-campaign{
-  width:100%;padding:13px;margin-top:8px;
-  background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.35);color:#c084fc;
-  font-size:12px;letter-spacing:3px;border-radius:var(--r);cursor:pointer;
-  text-transform:uppercase;transition:all .15s;
-}
-.btn-campaign:hover{background:rgba(192,132,252,.22);}
-.btn-campaign:active{transform:scale(.99);}
-.btn-campaign:disabled{opacity:.38;cursor:default;}
-
-/* ── LOG MEJORADO ───────────────────────────────────── */
-.log-sep{
-  border:none;border-top:1px solid rgba(255,255,255,.07);
-  margin:5px 0;opacity:1;display:block;
-}
-.log-crit{
-  font-weight:700;font-size:13px;
-  text-shadow:0 0 8px rgba(232,196,106,.5);
-}
-.log-death{
-  font-weight:700;font-size:13px;
-}
-.log-room{
-  font-family:var(--font-h);font-size:11px;letter-spacing:1.5px;
-  padding:2px 0;
-}
+/* ── DUNGEON ─────────────────────────────────── */
+.dmap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.droom{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;display:flex;align-items:center;gap:12px;transition:border-color .2s;}
+.droom.done{opacity:.55;border-color:rgba(74,222,128,.2);}
+.droom.active{border-color:rgba(232,196,106,.4);background:linear-gradient(135deg,var(--surf),rgba(232,196,106,.04));}
+.droom.locked{opacity:.32;pointer-events:none;}
+.droom-ico{font-size:26px;line-height:1;flex-shrink:0;}
+.droom-info{flex:1;min-width:0;}
+.droom-type{font-family:var(--font-h);font-size:8px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:2px;}
+.droom-name{font-family:var(--font-h);font-size:11px;letter-spacing:.5px;}
+.droom-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.droom-status{flex-shrink:0;}
+.dhero-bar{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;margin-bottom:10px;}
+.dhero-row{display:flex;align-items:center;gap:9px;margin-bottom:6px;}
+.dhero-row:last-child{margin-bottom:0;}
+.dhero-emoji{font-size:18px;line-height:1;flex-shrink:0;}
+.dhero-info{flex:1;min-width:0;}
+.dhero-name{font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:3px;}
 </style>
 </head>
 <body>
@@ -650,12 +607,12 @@ button{font-family:var(--font-h);}
       <button @click.stop="missionsTab='daily'"
         class="tab-btn" :class="missionsTab==='daily' ? 'tab-active' : ''">
         <span>📜</span><span>DIARIAS</span>
-        <span x-show="hasMissionReady()" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#4ade80;color:#000;font-size:8px;font-weight:700;line-height:1">!</span>
+        <span x-show="hasMissionReady()" style="width:6px;height:6px;border-radius:50%;background:#4ade80;flex-shrink:0;display:inline-block;margin-left:2px"></span>
       </button>
       <button @click.stop="missionsTab='achievements'"
         class="tab-btn" :class="missionsTab==='achievements' ? 'tab-active' : ''">
         <span>🏅</span><span>LOGROS</span>
-        <span x-show="hasAchievementReady()" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#4ade80;color:#000;font-size:8px;font-weight:700;line-height:1">!</span>
+        <span x-show="hasAchievementReady()" style="width:6px;height:6px;border-radius:50%;background:#4ade80;flex-shrink:0;display:inline-block;margin-left:2px"></span>
       </button>
     </div>
 
@@ -755,10 +712,6 @@ button{font-family:var(--font-h);}
             <div class="bcard-nm">Núcleo</div>
             <div class="bcard-lv">Nv.<span x-text="lvls.core"></span></div>
             <div class="bcard-sub">Héroes max Camp Nv.<span x-text="lvls.core"></span> · Edificios max Nv.<span x-text="lvls.core+1"></span></div>
-          </div>
-          <div style="text-align:right">
-            <div class="bcard-nm">Victorias</div>
-            <div class="bcard-lv" x-text="wins"></div>
           </div>
         </div>
         <div x-show="coreReq()" style="font-size:10px;color:var(--muted);margin-bottom:7px">
@@ -873,105 +826,9 @@ button{font-family:var(--font-h);}
       </div>
     </div>
 
-    <!-- HÉROES -->
-    <div class="stitle" style="margin-top:14px">Equipo</div>
-
-    <!-- Equipo equipado -->
-    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
-      <template x-for="slot in [0,1,2]" :key="slot">
-
-        <!-- SLOT OCUPADO -->
-        <template x-if="team[slot]">
-          <div style="border-radius:12px;border:1px solid rgba(232,196,106,.3);background:linear-gradient(135deg,rgba(232,196,106,.07) 0%,rgba(255,255,255,.02) 100%);padding:12px 14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden">
-            <!-- Brillo lateral izquierdo -->
-            <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,rgba(232,196,106,.8),rgba(232,196,106,.2));border-radius:3px 0 0 3px"></div>
-            <!-- Posición -->
-            <div style="display:flex;flex-direction:column;align-items:center;min-width:28px">
-              <div style="font-family:var(--font-h);font-size:18px;color:var(--gold);line-height:1" x-text="slot+1"></div>
-              <div style="font-family:var(--font-h);font-size:8px;color:rgba(232,196,106,.5);letter-spacing:1px">POS</div>
-            </div>
-            <!-- Emoji -->
-            <div style="font-size:34px;line-height:1;filter:drop-shadow(0 0 8px rgba(232,196,106,.3))" x-text="HD[team[slot]].emoji"></div>
-            <!-- Info -->
-            <div style="flex:1;min-width:0">
-              <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" x-text="HD[team[slot]].name"></div>
-              <div style="font-size:10px;color:var(--muted);margin-top:1px">
-                Nv.<span style="color:var(--gold);font-weight:600" x-text="heroLvls[team[slot]]"></span>
-                <span style="margin-left:6px;opacity:.5">·</span>
-                <span style="margin-left:6px">SPD <span x-text="HD[team[slot]].stats.spd"></span></span>
-              </div>
-              <!-- Mini barra BST -->
-              <div style="margin-top:6px;display:flex;gap:3px;align-items:center">
-                <template x-for="[stat,color] in [['atk','#f87171'],['def','#60a5fa'],['spd','#4ade80'],['spatk','#c084fc']]" :key="stat">
-                  <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden">
-                    <div :style="'height:100%;border-radius:2px;background:'+color+';width:'+Math.min(100,Math.round(HD[team[slot]].stats[stat]/1.5))+'%'"></div>
-                  </div>
-                </template>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:3px">
-                <template x-for="[label,color] in [['ATK','#f87171'],['DEF','#60a5fa'],['SPD','#4ade80'],['SATK','#c084fc']]" :key="label">
-                  <span style="font-family:var(--font-h);font-size:7px;letter-spacing:.5px;flex:1;text-align:center" :style="'color:'+color+';opacity:.55'" x-text="label"></span>
-                </template>
-              </div>
-            </div>
-            <!-- Botón quitar -->
-            <button @click="toggleTeam(team[slot])"
-              style="padding:5px 8px;border-radius:7px;font-family:var(--font-h);font-size:8px;letter-spacing:.5px;cursor:pointer;background:transparent;border:1px solid rgba(248,113,113,.25);color:rgba(248,113,113,.6);flex-shrink:0;transition:all .15s"
-              @mouseover="$el.style.background='rgba(248,113,113,.1)'" @mouseout="$el.style.background='transparent'">
-              ✕
-            </button>
-          </div>
-        </template>
-
-        <!-- SLOT VACÍO -->
-        <template x-if="!team[slot]">
-          <div style="border-radius:12px;border:1px dashed rgba(255,255,255,.1);background:rgba(255,255,255,.01);padding:14px;display:flex;align-items:center;gap:12px">
-            <div style="font-family:var(--font-h);font-size:18px;color:rgba(255,255,255,.1);min-width:28px;text-align:center" x-text="slot+1"></div>
-            <div style="font-size:22px;opacity:.15">⬜</div>
-            <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.15)">RANURA VACÍA</div>
-          </div>
-        </template>
-
-      </template>
-    </div>
-
-    <!-- Toggle cuarteles -->
-    <button @click="showAllHeroes=!showAllHeroes"
-      style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surf);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;color:var(--text);margin-bottom:8px">
-      <div style="display:flex;align-items:center;gap:9px">
-        <span style="font-size:16px">🏕️</span>
-        <span style="font-family:var(--font-h);font-size:10px;letter-spacing:1.5px;color:var(--muted)">CUARTELES</span>
-        <span style="font-family:var(--font-h);font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(232,196,106,.12);border:1px solid rgba(232,196,106,.25);color:var(--gold)"
-          x-text="['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'].filter(h=>HD[h].unlocked).length"></span>
-      </div>
-      <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)" x-text="showAllHeroes ? '▲ OCULTAR' : '▼ VER TODOS'"></span>
-    </button>
-
-    <div x-show="showAllHeroes" x-collapse>
-      <div class="grid2" style="margin-bottom:4px">
-        <template x-for="hid in ['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'].filter(h=>HD[h].unlocked)" :key="hid">
-          <div class="card hcard" :style="team.includes(hid)?'border-color:rgba(232,196,106,.35);background:rgba(232,196,106,.04)':''">
-            <div class="bcard-top" style="margin-bottom:7px">
-              <div class="bcard-ico" x-text="HD[hid].emoji"></div>
-              <div style="flex:1">
-                <div class="bcard-nm" x-text="HD[hid].name"></div>
-                <div class="bcard-lv">Camp Nv.<span x-text="lvls[hid]"></span></div>
-                <div class="bcard-sub">Héroe Nv.<span x-text="heroLvls[hid]"></span></div>
-              </div>
-              <span class="badge-team" x-show="team.includes(hid)" x-text="(team.indexOf(hid)+1)+'º'"></span>
-            </div>
-            <div class="bcard-row">
-              <button class="btn-up" @click="upgrade(hid)"><span x-text="upgCost(hid)"></span>🟡</button>
-              <button class="btn-up" :class="team.includes(hid)?'g':''" @click="toggleTeam(hid)"
-                x-text="team.includes(hid)?'✓ Quitar':'+ Equipo'"></button>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-
-    <button class="btn-atk" @click="startBattle()" :disabled="team.length===0">⚔️ ATACAR</button>
-    <button class="btn-campaign" @click="startCampaign()" :disabled="team.length===0" style="margin-top:8px">🗺️ MAZMORRA — 5 SALAS</button>
+    <!-- COMBATE -->
+    <button class="btn-atk" @click="startBattle()" :disabled="team.length===0" style="margin-top:14px">⚔️ ATACAR</button>
+    <div x-show="team.length===0" style="text-align:center;font-size:10px;color:var(--muted);margin-top:5px;margin-bottom:4px">Añade héroes al equipo en la pestaña Héroes</div>
 
     <!-- GUARDADO -->
     <div class="stitle" style="margin-top:18px">Guardado</div>
@@ -1010,145 +867,61 @@ button{font-family:var(--font-h);}
     <!-- Resultado: fixed, cubre toda la pantalla -->
     <div x-show="result!==null" x-cloak class="result-overlay">
       <div class="result-inner">
-
-      <!-- ── VICTORIA SALA (campaña) ───────────────────── -->
-      <template x-if="result==='campaign_room'">
-        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-          <div class="result-title" style="color:#c084fc;font-size:22px;margin-bottom:6px">✅ SALA <span x-text="campaignRoom"></span> COMPLETADA</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-family:var(--font-h);letter-spacing:1px">💚 +25% HP recuperado</div>
-          <div class="result-reward" x-show="goldAdded>0||waterAdded>0">
-            <span x-show="goldAdded>0">+<span x-text="goldAdded"></span>🟡 </span>
-            <span x-show="waterAdded>0">+<span x-text="waterAdded"></span>💧</span>
-          </div>
-          <div class="result-stats" style="margin-bottom:14px">
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.dmg"></div>
-              <div class="result-stat-lbl">DMG TOTAL</div>
-            </div>
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.crits"></div>
-              <div class="result-stat-lbl">CRÍTICOS</div>
-            </div>
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="campaignRoom+'/5'"></div>
-              <div class="result-stat-lbl">PROGRESO</div>
-            </div>
-          </div>
-          <!-- Hero HP preview after heal -->
-          <div style="display:flex;gap:6px;margin-bottom:14px;width:100%;justify-content:center">
-            <template x-for="h in (campaignHeroes||[])" :key="h.id">
-              <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 9px;text-align:center;flex:1;min-width:0;max-width:90px">
-                <div style="font-size:16px" x-text="h.emoji"></div>
-                <div style="font-size:9px;font-family:var(--font-h);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" x-text="h.name"></div>
-                <div style="font-size:9px;margin-top:2px" :style="h.hp<=0?'color:#f87171':'color:#4ade80'" x-text="h.hp<=0?'CAÍDO':Math.floor(h.hp)+'/'+h.maxHp"></div>
-              </div>
-            </template>
-          </div>
-          <div style="display:flex;gap:9px;width:100%">
-            <button class="btn-return" style="flex:1;background:rgba(192,132,252,.15);border-color:rgba(192,132,252,.4);color:#c084fc" @click="nextCampaignRoom()">SIGUIENTE SALA →</button>
-            <button class="btn-return" style="flex:0 0 auto;font-size:10px;background:transparent;border-color:rgba(255,255,255,.15);color:var(--muted)" @click="abandonCampaign()">✕ SALIR</button>
-          </div>
-        </div>
-      </template>
-
-      <!-- ── VICTORIA FINAL (campaña) ──────────────────── -->
-      <template x-if="result==='campaign_win'">
-        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-          <div style="font-size:32px;margin-bottom:6px">🏆</div>
-          <div class="result-title" style="color:var(--gold);font-size:24px">MAZMORRA COMPLETADA</div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:10px">5 salas superadas · Jefe derrotado</div>
-          <div class="result-reward" style="margin-bottom:6px">
-            <span x-show="campaignGoldEarned>0">+<span x-text="campaignGoldEarned"></span>🟡 </span>
-            <span x-show="campaignWaterEarned>0">+<span x-text="campaignWaterEarned"></span>💧 </span>
-            +<span x-text="campaignRubiesEarned"></span>♦
-          </div>
-          <div style="font-size:10px;color:rgba(232,196,106,.6);font-family:var(--font-h);margin-bottom:14px;letter-spacing:1px">RECOMPENSA ×2 + 5♦ BONUS</div>
-          <div class="result-stats">
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.dmg"></div>
-              <div class="result-stat-lbl">DMG FINAL</div>
-            </div>
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.crits"></div>
-              <div class="result-stat-lbl">CRÍTICOS</div>
-            </div>
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.turns"></div>
-              <div class="result-stat-lbl">TURNOS</div>
-            </div>
-          </div>
-          <button class="btn-return" @click="exitCampaign()">← VOLVER A LA ALDEA</button>
-        </div>
-      </template>
-
-      <!-- ── DERROTA EN CAMPAÑA ─────────────────────────── -->
-      <template x-if="result==='campaign_lose'">
-        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-          <div class="result-title" style="color:var(--danger)">💀 DERROTA</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">La mazmorra ha terminado en la sala <span x-text="campaignRoom+1"></span></div>
-          <div x-show="campaignGoldEarned>0||campaignWaterEarned>0" class="result-reward">
-            <span style="font-size:11px;color:var(--muted)">Conseguido: </span>
-            <span x-show="campaignGoldEarned>0">+<span x-text="campaignGoldEarned"></span>🟡 </span>
-            <span x-show="campaignWaterEarned>0">+<span x-text="campaignWaterEarned"></span>💧</span>
-          </div>
-          <div class="result-stats">
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="battleStats.dmg"></div>
-              <div class="result-stat-lbl">DMG TOTAL</div>
-            </div>
-            <div class="result-stat">
-              <div class="result-stat-val" x-text="(campaignRoom)+'/5'"></div>
-              <div class="result-stat-lbl">SALAS</div>
-            </div>
-          </div>
-          <button class="btn-return" @click="exitCampaign()">← VOLVER</button>
-        </div>
-      </template>
-
-      <!-- ── NORMAL WIN / LOSE ──────────────────────────── -->
-      <template x-if="result==='win'||result==='lose'">
-        <div style="display:flex;flex-direction:column;align-items:center;width:100%">
-        <div class="result-title"
-          :style="result==='win'?'color:var(--gold)':'color:var(--danger)'"
-          x-text="result==='win'?'⚔️ VICTORIA':'💀 DERROTA'"></div>
-        <template x-if="result==='win'">
+      <div class="result-title"
+        :style="result==='win'?'color:var(--gold)':'color:var(--danger)'"
+        x-text="result==='win'?(bat?.isDungeon?(dungeonState?.complete?'🏆 COMPLETADA':'⚔️ SALA '+(bat.dungeonFloor+1)):'⚔️ VICTORIA'):'💀 DERROTA'"></div>
+      <template x-if="result==='win'">
+        <div>
           <div class="result-reward">
             <span x-show="goldAdded>0">+<span x-text="goldAdded"></span>🟡 </span>
             <span x-show="waterAdded>0">+<span x-text="waterAdded"></span>💧 </span>
             +<span x-text="rubiesAdded"></span>♦
           </div>
-        </template>
-        <template x-if="result==='lose'">
-          <div class="result-sub">El equipo cayó en batalla</div>
-        </template>
-        <div class="result-stats">
-          <div class="result-stat">
-            <div class="result-stat-val" x-text="battleStats.dmg"></div>
-            <div class="result-stat-lbl">DMG TOTAL</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-val" x-text="battleStats.crits"></div>
-            <div class="result-stat-lbl">CRÍTICOS</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-val" x-text="battleStats.efx"></div>
-            <div class="result-stat-lbl">EFECTOS</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-val" x-text="battleStats.turns"></div>
-            <div class="result-stat-lbl">TURNOS</div>
-          </div>
-        </div>
-        <template x-if="mvpHero()">
-          <div class="result-mvp">
-            ⭐ MVP: <span x-text="mvpHero().emoji+' '+mvpHero().name"></span>
-            (<span x-text="mvpHero().dmg"></span> dmg)
-          </div>
-        </template>
-        <button class="btn-return" @click="exitBattle()">← VOLVER</button>
+          <template x-if="bat?.isDungeon&&dungeonState?.complete">
+            <div class="result-sub" style="color:var(--gold)">🏆 ¡Mazmorra completada! Bonus +3♦ incluido</div>
+          </template>
+          <template x-if="bat?.isDungeon&&!dungeonState?.complete">
+            <div class="result-sub">Sala <span x-text="bat.dungeonFloor+1"></span> de <span x-text="dungeonState?.map?.length||'?'"></span> · Continúa</div>
+          </template>
         </div>
       </template>
-
+      <template x-if="result==='lose'">
+        <div>
+          <div class="result-sub" x-text="bat?.isDungeon?'El equipo cayó en la mazmorra':'El equipo cayó en batalla'"></div>
+          <template x-if="bat?.isDungeon&&dungeonState&&(dungeonState.goldEarned>0||dungeonState.waterEarned>0)">
+            <div class="result-reward" style="font-size:12px;color:var(--muted)">
+              Acumulado: +<span x-text="dungeonState.goldEarned"></span>🟡 +<span x-text="dungeonState.waterEarned"></span>💧<template x-if="dungeonState.rubiesEarned>0"> +<span x-text="dungeonState.rubiesEarned"></span>♦</template>
+            </div>
+          </template>
+        </div>
+      </template>
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-val" x-text="battleStats.dmg"></div>
+          <div class="result-stat-lbl">DMG TOTAL</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val" x-text="battleStats.crits"></div>
+          <div class="result-stat-lbl">CRÍTICOS</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val" x-text="battleStats.efx"></div>
+          <div class="result-stat-lbl">EFECTOS</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val" x-text="battleStats.turns"></div>
+          <div class="result-stat-lbl">TURNOS</div>
+        </div>
+      </div>
+      <template x-if="mvpHero()">
+        <div class="result-mvp">
+          ⭐ MVP: <span x-text="mvpHero().emoji+' '+mvpHero().name"></span>
+          (<span x-text="mvpHero().dmg"></span> dmg)
+        </div>
+      </template>
+      <button class="btn-return" @click="exitBattle()"
+        x-text="bat?.isDungeon?(result==='win'&&!dungeonState?.complete?'→ CONTINUAR':'← COBRAR Y SALIR'):'← VOLVER'">
+      </button>
       </div>
     </div>
 
@@ -1157,7 +930,7 @@ button{font-family:var(--font-h);}
       <div class="fighter eside" :class="eAnim" x-text="enemy?.emoji||'?'"></div>
       <div x-show="enemy!==null && result===null" x-cloak
         style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--font-h);font-size:10px;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,.65);border:1px solid rgba(232,196,106,.3);border-radius:20px;padding:3px 14px;white-space:nowrap;"
-        x-text="waveTotal>1 ? 'RONDA '+(wins+1)+' · '+waveTotal+' enemigos' : 'RONDA '+(wins+1)"></div>
+        x-text="bat?.isDungeon?'SALA '+(bat.dungeonFloor+1)+' / '+(dungeonState?.map?.length||'?'):(waveTotal>1 ? 'RONDA '+(wins+1)+' · '+waveTotal+' enemigos' : 'RONDA '+(wins+1))"></div>
     </div>
 
     <!-- BUI mejorado -->
@@ -1200,12 +973,7 @@ button{font-family:var(--font-h);}
 
     <div id="blog">
       <template x-for="(l,i) in log" :key="i">
-        <template x-if="l.type==='sep'">
-          <hr class="log-sep">
-        </template>
-        <template x-if="l.type!=='sep'">
-          <div :style="l.s" :class="l.type?'log-'+l.type:''" x-text="l.t"></div>
-        </template>
+        <div :style="l.s" x-text="l.t"></div>
       </template>
     </div>
     <div id="mvbtns">
@@ -1255,8 +1023,72 @@ button{font-family:var(--font-h);}
   <!-- ══════════ INFO ══════════ -->
   <div class="screen" :class="{on:screen==='info'}">
     <div class="stitle">Héroes</div>
-    <template x-for="hid in ['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'].filter(h=>HD[h].unlocked)" :key="hid">
-      <div class="hinfo" style="margin-bottom:8px;padding:0;overflow:hidden;">
+
+    <!-- EQUIPO ACTIVO -->
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px">
+      <template x-for="slot in [0,1,2]" :key="slot">
+        <template x-if="team[slot]">
+          <div style="border-radius:12px;border:1px solid rgba(232,196,106,.3);background:linear-gradient(135deg,rgba(232,196,106,.07),rgba(255,255,255,.02));padding:12px 14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,rgba(232,196,106,.8),rgba(232,196,106,.2));border-radius:3px 0 0 3px"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;min-width:28px">
+              <div style="font-family:var(--font-h);font-size:18px;color:var(--gold);line-height:1" x-text="slot+1"></div>
+              <div style="font-family:var(--font-h);font-size:8px;color:rgba(232,196,106,.5);letter-spacing:1px">POS</div>
+            </div>
+            <div style="font-size:34px;line-height:1;filter:drop-shadow(0 0 8px rgba(232,196,106,.3))" x-text="HD[team[slot]].emoji"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:var(--font-h);font-size:12px;letter-spacing:.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" x-text="HD[team[slot]].name"></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px">Nv.<span style="color:var(--gold);font-weight:600" x-text="heroLvls[team[slot]]"></span><span style="margin-left:6px">SPD <span x-text="HD[team[slot]].stats.spd"></span></span></div>
+              <div style="margin-top:6px;display:flex;gap:3px;align-items:center">
+                <template x-for="[stat,color] in [['atk','#f87171'],['def','#60a5fa'],['spd','#4ade80'],['spatk','#c084fc']]" :key="stat">
+                  <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden"><div :style="'height:100%;border-radius:2px;background:'+color+';width:'+Math.min(100,Math.round(HD[team[slot]].stats[stat]/1.5))+'%'"></div></div>
+                </template>
+              </div>
+            </div>
+            <button @click="toggleTeam(team[slot])" style="padding:5px 8px;border-radius:7px;font-family:var(--font-h);font-size:8px;cursor:pointer;background:transparent;border:1px solid rgba(248,113,113,.25);color:rgba(248,113,113,.6);flex-shrink:0;transition:all .15s">✕</button>
+          </div>
+        </template>
+        <template x-if="!team[slot]">
+          <div style="border-radius:12px;border:1px dashed rgba(255,255,255,.1);background:rgba(255,255,255,.01);padding:14px;display:flex;align-items:center;gap:12px">
+            <div style="font-family:var(--font-h);font-size:18px;color:rgba(255,255,255,.1);min-width:28px;text-align:center" x-text="slot+1"></div>
+            <div style="font-size:22px;opacity:.15">⬜</div>
+            <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.15)">RANURA VACÍA</div>
+          </div>
+        </template>
+      </template>
+    </div>
+
+    <!-- CUARTELES -->
+    <button @click="showAllHeroes=!showAllHeroes"
+      style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surf);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;color:var(--text);margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font-size:16px">🏕️</span>
+        <span style="font-family:var(--font-h);font-size:10px;letter-spacing:1.5px;color:var(--muted)">CUARTELES</span>
+        <span style="font-family:var(--font-h);font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(232,196,106,.12);border:1px solid rgba(232,196,106,.25);color:var(--gold)" x-text="CAMPS.filter(h=>HD[h].unlocked).length"></span>
+      </div>
+      <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)" x-text="showAllHeroes?'▲ OCULTAR':'▼ VER TODOS'"></span>
+    </button>
+    <div x-show="showAllHeroes" x-collapse>
+      <div class="grid2" style="margin-bottom:4px">
+        <template x-for="hid in CAMPS.filter(h=>HD[h].unlocked)" :key="hid">
+          <div class="card hcard" :style="team.includes(hid)?'border-color:rgba(232,196,106,.35);background:rgba(232,196,106,.04)':''">
+            <div class="bcard-top" style="margin-bottom:7px">
+              <div class="bcard-ico" x-text="HD[hid].emoji"></div>
+              <div style="flex:1"><div class="bcard-nm" x-text="HD[hid].name"></div><div class="bcard-lv">Camp Nv.<span x-text="lvls[hid]"></span></div><div class="bcard-sub">Héroe Nv.<span x-text="heroLvls[hid]"></span></div></div>
+              <span class="badge-team" x-show="team.includes(hid)" x-text="(team.indexOf(hid)+1)+'º'"></span>
+            </div>
+            <div class="bcard-row">
+              <button class="btn-up" @click="upgrade(hid)"><span x-text="upgCost(hid)"></span>🟡</button>
+              <button class="btn-up" :class="team.includes(hid)?'g':''" @click="toggleTeam(hid)" x-text="team.includes(hid)?'✓ Quitar':'+ Equipo'"></button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- STATS DE HÉROES -->
+    <div class="stitle" style="margin-top:6px">Stats</div>
+    <template x-for="hid in CAMPS.filter(h=>HD[h].unlocked)" :key="hid">
+      <div class="hinfo" style="padding:0;overflow:hidden;margin-bottom:10px">
         <div style="display:flex;align-items:center;border-bottom:1px solid var(--border);">
           <div class="hinfo-toggle" style="flex:1;border:none;border-radius:0;border-bottom:none;cursor:pointer"
             @click="openHero = openHero===hid ? null : hid">
@@ -1302,8 +1134,71 @@ button{font-family:var(--font-h);}
     </template>
   </div>
 
+  <!-- ══════════ AVENTURA ══════════ -->
+  <div class="screen" :class="{on:screen==='adventure'}">
+    <div class="stitle">Aventura</div>
+
+    <!-- COMBATE -->
+    <div class="card full" style="border-color:rgba(248,113,113,.2);background:linear-gradient(135deg,var(--surf),rgba(248,113,113,.03));margin-bottom:9px">
+      <div class="bcard-top" style="margin-bottom:8px">
+        <div class="bcard-ico">⚔️</div>
+        <div style="flex:1">
+          <div class="bcard-nm">Combate</div>
+          <div class="bcard-lv" style="color:var(--danger)">Ronda <span x-text="wins+1"></span></div>
+          <div class="bcard-sub">Oleadas de enemigos · Recompensas de oro y agua</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--font-h);font-size:9px;color:var(--muted)">VICTORIAS</div>
+          <div style="font-family:var(--font-h);font-size:18px;color:var(--gold)" x-text="wins"></div>
+        </div>
+      </div>
+      <button class="btn-atk" @click="startBattle()" :disabled="team.length===0" style="margin-top:0">⚔️ ATACAR</button>
+      <div x-show="team.length===0" style="text-align:center;font-size:10px;color:var(--muted);margin-top:6px">Añade héroes al equipo en la pestaña Héroes</div>
+    </div>
+
+    <!-- DUNGEON -->
+    <div class="card full" style="border-color:rgba(232,196,106,.2);background:linear-gradient(135deg,var(--surf),rgba(232,196,106,.03));margin-bottom:9px;cursor:pointer" @click="screen='dungeon'">
+      <div class="bcard-top">
+        <div class="bcard-ico">🗺️</div>
+        <div style="flex:1">
+          <div class="bcard-nm">Mazmorras</div>
+          <template x-if="dungeonState">
+            <div>
+              <div class="bcard-lv" style="color:var(--gold)">
+                <span x-text="DUNGEONS.find(d=>d.id===dungeonState.biomeId)?.name"></span>
+                — Sala <span x-text="dungeonState.floor+1"></span>/<span x-text="dungeonState.map.length"></span>
+              </div>
+              <div class="bcard-sub">+<span x-text="dungeonState.goldEarned"></span>🟡 acumulados</div>
+            </div>
+          </template>
+          <template x-if="!dungeonState">
+            <div><div class="bcard-lv">5 biomas</div><div class="bcard-sub">HP persistente entre salas · Recompensas exclusivas</div></div>
+          </template>
+        </div>
+        <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)">Ver →</span>
+      </div>
+    </div>
+
+    <!-- BESTIARIO -->
+    <div class="card full" style="cursor:pointer" @click="screen='bestiary'">
+      <div class="bcard-top">
+        <div class="bcard-ico">📖</div>
+        <div style="flex:1">
+          <div class="bcard-nm">Bestiario</div>
+          <div class="bcard-lv">Bestiario</div>
+          <div class="bcard-sub">Stats y cómo desbloquear cada rival como héroe</div>
+        </div>
+        <span style="font-family:var(--font-h);font-size:9px;color:var(--muted)">Ver →</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════════ BESTIARIO ══════════ -->
   <div class="screen" :class="{on:screen==='bestiary'}">
+    <button @click="screen='adventure'"
+      style="display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--font-h);font-size:9px;letter-spacing:2px;cursor:pointer;padding:0;margin-bottom:14px">
+      ‹ AVENTURA
+    </button>
     <div class="stitle">Bestiario</div>
     <template x-for="eid in ENEMY_POOL" :key="eid">
       <div class="hinfo" style="padding:0;overflow:hidden;margin-bottom:10px">
@@ -1419,7 +1314,7 @@ button{font-family:var(--font-h);}
       </div>
     </div>
     <div class="stitle">Movimientos</div>
-    <template x-for="hid in ['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'].filter(h=>HD[h].unlocked)" :key="hid">
+    <template x-for="hid in CAMPS.filter(h=>HD[h].unlocked)" :key="hid">
       <div class="hinfo" style="margin-bottom:8px;padding:0;overflow:hidden;border-color:rgba(232,196,106,.18)">
         <button class="hinfo-toggle" @click="openLabHero = openLabHero===hid ? null : hid">
           <div style="display:flex;align-items:center;gap:10px;">
@@ -1609,6 +1504,96 @@ button{font-family:var(--font-h);}
       </div>
     </div>
   </div>
+  <!-- ══════════ DUNGEON ══════════ -->
+  <div class="screen" :class="{on:screen==='dungeon'}">
+    <button @click="screen='adventure'"
+      style="display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--font-h);font-size:9px;letter-spacing:2px;cursor:pointer;padding:0;margin-bottom:14px">
+      ‹ AVENTURA
+    </button>
+    <div class="stitle">Mazmorras</div>
+
+    <!-- Sin run activo: selector de biomas -->
+    <div x-show="!dungeonState">
+      <template x-for="b in DUNGEONS" :key="b.id">
+        <div class="card full" :style="lvls.core<b.coreReq?'opacity:.45;border-style:dashed':'border-color:rgba(232,196,106,.2);background:linear-gradient(135deg,var(--surf),rgba(232,196,106,.03))'" style="margin-bottom:9px">
+          <div class="bcard-top" style="margin-bottom:8px">
+            <div class="bcard-ico" x-text="b.emoji"></div>
+            <div style="flex:1">
+              <div class="bcard-nm" x-text="b.name"></div>
+              <div class="bcard-lv" x-text="b.rooms+' salas'"></div>
+              <div class="bcard-sub" x-text="lvls.core<b.coreReq?'🔒 Requiere Núcleo Nv.'+b.coreReq:'Nivel estimado: '+((_maxHeroLvl()+b.lvlOffset))+' — '+((_maxHeroLvl()+b.lvlOffset+5))"></div>
+            </div>
+          </div>
+          <button class="btn-atk" @click="startDungeon(b.id)" :disabled="team.length===0||lvls.core<b.coreReq" style="margin-top:0">🗺️ ENTRAR</button>
+        </div>
+      </template>
+    </div>
+
+    <!-- Run activo -->
+    <div x-show="dungeonState">
+      <!-- Cabecera: bioma, progreso y acumulado -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:var(--font-h);font-size:10px;letter-spacing:1.5px;color:var(--muted)">
+          <span x-text="DUNGEONS.find(d=>d.id===dungeonState?.biomeId)?.emoji"></span>
+          SALA <span style="color:var(--gold)" x-text="dungeonState?(dungeonState.floor+1):1"></span>
+          / <span x-text="dungeonState?.map?.length||0"></span>
+        </div>
+        <div style="font-family:var(--font-h);font-size:10px;color:var(--muted)">
+          <span style="color:var(--gold)" x-text="dungeonState?.goldEarned||0"></span>🟡
+          <span style="color:var(--water);margin-left:4px" x-text="dungeonState?.waterEarned||0"></span>💧
+          <span style="color:var(--ruby);margin-left:4px" x-text="dungeonState?.rubiesEarned||0"></span>♦
+        </div>
+      </div>
+
+      <!-- HP del equipo -->
+      <div class="dhero-bar">
+        <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:8px">EQUIPO</div>
+        <template x-for="(h,i) in (dungeonState?.heroes||[])" :key="i">
+          <div class="dhero-row">
+            <div class="dhero-emoji" x-text="h.emoji"></div>
+            <div class="dhero-info">
+              <div class="dhero-name" x-text="h.name"></div>
+              <div class="hp-wrap"><div class="hp-bar" :class="hpCls(h.hp,h.maxHp)" :style="`width:${pct(h.hp,h.maxHp)}%`"></div></div>
+              <div style="font-size:9px;color:var(--muted);margin-top:1px"><span x-text="Math.max(0,Math.floor(h.hp))"></span>/<span x-text="h.maxHp"></span> HP</div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Mapa de salas -->
+      <div class="dmap">
+        <template x-for="(room,i) in (dungeonState?.map||[])" :key="i">
+          <div class="droom" :class="room.done?'done':i===(dungeonState?.floor||0)?'active':'locked'">
+            <div class="droom-ico" x-text="room.done?'✅':room.type==='combat'?'⚔️':room.type==='elite'?'💀':room.type==='rest'?'🛖':'👑'"></div>
+            <div class="droom-info">
+              <div class="droom-type" x-text="room.type==='combat'?'COMBATE':room.type==='elite'?'ÉLITE':room.type==='rest'?'DESCANSO':'JEFE FINAL'"></div>
+              <div class="droom-name" x-text="room.type==='rest'?'Cueva de descanso':(room.enemyName+' Nv.'+room.enemyLevel)"></div>
+              <div class="droom-sub" x-show="room.type!=='rest'" x-text="'+'+room.reward.gold+'🟡 +'+room.reward.water+'💧'+(room.reward.rubies>0?' +'+room.reward.rubies+'♦':'')"></div>
+              <div class="droom-sub" x-show="room.type==='rest'">Recupera 25% HP del equipo</div>
+            </div>
+            <div class="droom-status">
+              <span x-show="room.done" style="font-family:var(--font-h);font-size:11px;color:#4ade80">✓</span>
+              <template x-if="!room.done && i===(dungeonState?.floor||0)">
+                <button class="btn-up" style="font-size:9px;padding:5px 10px;white-space:nowrap"
+                  @click="enterDungeonRoom(i)"
+                  x-text="room.type==='rest'?'🛖 Descansar':'⚔️ Entrar'">
+                </button>
+              </template>
+              <span x-show="!room.done && i!==(dungeonState?.floor||0)" style="font-size:12px;color:var(--muted)">🔒</span>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Abandonar -->
+      <button @click="abandonDungeon()"
+        style="width:100%;padding:10px;background:var(--danger-d);border:1px solid rgba(248,113,113,.3);color:var(--danger);font-family:var(--font-h);font-size:10px;letter-spacing:2px;border-radius:var(--r);cursor:pointer;transition:all .15s">
+        ✕ ABANDONAR (cobrar lo acumulado)
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════ MERCADO ══════════ -->
   <div class="screen" :class="{on:screen==='market'}">
     <div class="stitle">Mercado de Recursos</div>
 
@@ -1853,7 +1838,7 @@ button{font-family:var(--font-h);}
         <div class="tut-page" :class="{on:tutPage===1}">
           <div class="tut-section">
             <div class="tut-section-title">⚔️ Héroes</div>
-            <p class="tut-p">Empiezas con <span class="hl">Caballero ⚔️</span>, <span class="hl">Arquera 🏹</span> y <span class="hl">Lobo 🐺</span>. El equipo máximo es de <span class="tut-tag green">3 héroes</span> y puedes cambiarlos durante el combate.</p>
+            <p class="tut-p">Empiezas con <span class="hl">Caballero ⚔️</span>, <span class="hl">Arquera 🏹</span> y <span class="hl">Lobo 🐺</span>. El equipo máximo es de <span class="tut-tag green">4 héroes</span> y puedes cambiarlos durante el combate.</p>
             <p class="tut-p">El nivel máximo de cada héroe es el nivel de su Cuartel × 10. Para subir el Cuartel necesitas subir el Núcleo primero.</p>
           </div>
           <div class="tut-divider"></div>
@@ -1898,21 +1883,36 @@ button{font-family:var(--font-h);}
             <p class="tut-p">El número de enemigos por ronda aumenta con el progreso:</p>
             <p class="tut-p">
               <span class="hl">Rondas 1–5:</span> 1 enemigo.<br>
-              <span class="hl">Rondas 6–16:</span> 2 enemigos seguidos.<br>
-              <span class="hl">Rondas 17+:</span> 3 enemigos seguidos.<br>
-              <span class="hl" style="color:#f87171">Cada ronda ×10:</span> Ronda Jefe — +10% stats, +5 niveles. Recompensa doble <span class="hl">+3♦</span>.
+              <span class="hl">Rondas 6–14:</span> 2 enemigos seguidos.<br>
+              <span class="hl">Rondas 15–24:</span> 3 enemigos seguidos.<br>
+              <span class="hl">Rondas 25+:</span> 4 enemigos seguidos.<br>
+              <span class="hl" style="color:#f87171">Cada ronda ×10:</span> Ronda Jefe — 1 enemigo +5 niveles, stats +20%. Recompensa doble <span class="hl">+3♦</span>.
             </p>
           </div>
           <div class="tut-divider"></div>
           <div class="tut-section">
             <div class="tut-section-title">📈 Nivel de los enemigos</div>
-            <p class="tut-p">Los enemigos suben +1 nivel con cada victoria, ligados al nivel de tu héroe más alto del equipo. El tope por posición es:</p>
+            <p class="tut-p">Los enemigos suben +1 nivel con cada victoria. El tope máximo depende del formato:</p>
             <p class="tut-p">
               <span class="hl">1 enemigo:</span> máximo héroe +3.<br>
-              <span class="hl">2 enemigos:</span> 1º héroe +2, 2º héroe +3.<br>
-              <span class="hl">3 enemigos:</span> 1º héroe +1, 2º héroe +2, 3º héroe +3.<br>
+              <span class="hl">2 enemigos:</span> héroe +2 y +3.<br>
+              <span class="hl">3 enemigos:</span> héroe +1, +2 y +3.<br>
+              <span class="hl">4 enemigos:</span> héroe +1, +2, +2 y +3.<br>
               Al llegar al tope las recompensas se estancan y no dan rubíes. En cuanto sube el nivel de tu héroe, los enemigos vuelven a escalar.
             </p>
+          </div>
+          <div class="tut-divider"></div>
+          <div class="tut-section">
+            <div class="tut-section-title">🗺️ Mazmorras</div>
+            <p class="tut-p">Hay 5 biomas, cada uno con más salas y dificultad que el anterior. Se desbloquean con el nivel del Núcleo:</p>
+            <p class="tut-p">
+              🌲 <span class="hl">Bosque Sombrío</span> — 5 salas (desde el inicio)<br>
+              ⚰️ <span class="hl">Catacumbas Olvidadas</span> — 7 salas (Núcleo Nv.2)<br>
+              🌿 <span class="hl">Pantano Tóxico</span> — 7 salas (Núcleo Nv.4)<br>
+              🔥 <span class="hl">Tierras Abrasadas</span> — 9 salas (Núcleo Nv.6)<br>
+              🪨 <span class="hl">Abismo de Piedras Rúnicas</span> — 10 salas (Núcleo Nv.8)
+            </p>
+            <p class="tut-p">El HP del equipo persiste entre salas. Si caes cobras lo acumulado. Completar una mazmorra entera da rubíes extra.</p>
           </div>
           <div class="tut-divider"></div>
           <div class="tut-section">
@@ -1931,7 +1931,7 @@ button{font-family:var(--font-h);}
           <div class="tut-section">
             <div class="tut-section-title">🧿 Chamán — Fusiones</div>
             <p class="tut-p">Combina dos héroes para obtener uno nuevo. La primera fusión cuesta <span class="hl">5♦</span> + recursos; cada fusión adicional es más cara. Disponible desde Núcleo Nv.3.</p>
-            <p class="tut-p">Fusiones: Caballero+Arquera → Pícara · Lobo+Orco → Hombre Lobo · Mago+Slime → Druida · Hemodus+Vampiro → fusión especial.</p>
+            <p class="tut-p">Fusiones: Caballero+Arquera → Pícara · Caballero+Lobo → Hombre Lobo · Mago+Precursor → Druida · Caballero+Hemodus → Vampiro Superior.</p>
           </div>
           <div class="tut-divider"></div>
           <div class="tut-section">
@@ -1986,69 +1986,6 @@ button{font-family:var(--font-h);}
         </button>
       </div>
     </div>
-  </div>
-
-  <!-- ══════════ CAMPAÑA MAP ══════════ -->
-  <div class="screen" :class="{on:screen==='campaign'}">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <button @click="abandonCampaign()"
-        style="display:flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--muted);font-family:var(--font-h);font-size:9px;letter-spacing:2px;cursor:pointer;padding:0">
-        ‹ ABANDONAR
-      </button>
-      <div style="font-family:var(--font-h);font-size:9px;letter-spacing:2px;color:var(--muted)">SALA <span x-text="campaignRoom+1"></span>/5</div>
-    </div>
-    <div class="stitle">🗺️ Mazmorra</div>
-
-    <!-- Mapa de salas -->
-    <div class="camp-map">
-      <template x-for="(r,i) in campaignRooms" :key="i">
-        <div style="display:flex;align-items:center">
-          <div class="camp-room"
-            :class="i===4?'boss-room '+(i===campaignRoom?'current':campaignRooms[i]==='win'?'done':'locked'):(i===campaignRoom?'current':campaignRooms[i]==='win'?'done':i<campaignRoom?'done':'locked')">
-            <div class="camp-room-emoji" x-text="campaignRooms[i]==='win'?'✓':(i===campaignRoom?(i===4?'👑':'⚔️'):(i===4?'💀':'🚪'))"></div>
-            <div class="camp-room-lbl" x-text="i===4?'JEFE':'SALA '+(i+1)"></div>
-          </div>
-          <div x-show="i<4" class="camp-connector" :class="campaignRooms[i]==='win'?'done':''"></div>
-        </div>
-      </template>
-    </div>
-
-    <!-- Estado de héroes -->
-    <div style="font-family:var(--font-h);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px">EQUIPO</div>
-    <div class="camp-hero-row">
-      <template x-for="(h,i) in _campaignHeroDisplay()" :key="i">
-        <div class="camp-hero-card" :class="h.hp<=0?'camp-hero-dead':''">
-          <div style="font-size:20px;text-align:center;margin-bottom:3px" x-text="h.emoji"></div>
-          <div class="camp-hero-nm" x-text="h.name"></div>
-          <div class="hp-wrap" style="margin-bottom:2px">
-            <div class="hp-bar" :class="h.hp<=0?'hp-lo':hpCls(h.hp,h.maxHp)" :style="'width:'+pct(h.hp,h.maxHp)+'%'"></div>
-          </div>
-          <div style="font-size:9px;color:var(--muted);text-align:center" x-text="h.hp<=0?'CAÍDO':Math.floor(h.hp)+'/'+h.maxHp"></div>
-        </div>
-      </template>
-    </div>
-
-    <!-- Info sala actual -->
-    <div style="background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;margin-bottom:10px">
-      <div style="font-family:var(--font-h);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:5px">SALA ACTUAL</div>
-      <div style="font-size:12px;color:var(--text)" x-text="campaignRoom===4?'👑 Batalla final contra el Jefe de la Mazmorra':'⚔️ Sala '+(campaignRoom+1)+' — Enemigo aleatorio Nv.'+((_maxHeroLvl()||1)+campaignRoom)"></div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">
-        <span x-show="campaignRoom<4">💚 Recuperas 25% HP al superar esta sala</span>
-        <span x-show="campaignRoom===4" style="color:#f87171">⚠️ Sin recuperación — stats +10% · Recompensa doble</span>
-      </div>
-    </div>
-
-    <!-- Recompensas acumuladas -->
-    <div x-show="campaignGoldEarned>0||campaignWaterEarned>0" style="background:rgba(232,196,106,.06);border:1px solid rgba(232,196,106,.18);border-radius:var(--r);padding:8px 13px;margin-bottom:10px;font-size:11px">
-      <span style="font-family:var(--font-h);font-size:9px;color:var(--muted);letter-spacing:1px">ACUMULADO: </span>
-      <span x-show="campaignGoldEarned>0" style="color:var(--gold)">+<span x-text="campaignGoldEarned"></span>🟡 </span>
-      <span x-show="campaignWaterEarned>0" style="color:var(--water)">+<span x-text="campaignWaterEarned"></span>💧</span>
-    </div>
-
-    <button class="btn-atk" style="background:rgba(192,132,252,.12);border-color:rgba(192,132,252,.35);color:#c084fc;letter-spacing:2px"
-      @click="enterCampaignRoom()">
-      <span x-text="campaignRoom===4?'👑 ENFRENTARSE AL JEFE':'⚔️ ENTRAR EN SALA '+(campaignRoom+1)"></span>
-    </button>
   </div>
 
   <!-- ══════════ CHAMÁN ══════════ -->
@@ -2149,13 +2086,13 @@ button{font-family:var(--font-h);}
     </template>
   </div>
 
-  <!-- NAV (5 botones ahora) -->
+  <!-- NAV -->
   <div id="nav" x-show="screen!=='combat'">
-    <button class="nbtn" :class="{on:screen==='village'}"   @click="screen='village'">🏰 Reino</button>
-    <button class="nbtn" :class="{on:screen==='info'}"      @click="screen='info'">📊 Héroes</button>
-    <button class="nbtn" :class="{on:screen==='market'}"    @click="screen='market'">🏪 Mercado</button>
-    <button class="nbtn" :class="{on:screen==='bestiary'}"  @click="screen='bestiary'">📖 Bestiario</button>
-    <button class="nbtn" :class="{on:screen==='shop'}"      @click="screen='shop'">🛒 Tienda</button>
+    <button class="nbtn" :class="{on:screen==='shop'}"                                                        @click="screen='shop'">🛒 Tienda</button>
+    <button class="nbtn" :class="{on:screen==='info'}"                                                        @click="screen='info'">📊 Héroes</button>
+    <button class="nbtn" :class="{on:screen==='village'}"                                                     @click="screen='village'">🏰 Reino</button>
+    <button class="nbtn" :class="{on:screen==='adventure'||screen==='dungeon'||screen==='bestiary'}"          @click="screen='adventure'">⚔️ Aventura</button>
+    <button class="nbtn" :class="{on:screen==='market'}"                                                      @click="screen='market'">🏪 Mercado</button>
   </div>
 
 </div>
@@ -2170,15 +2107,7 @@ function G() { return {
   showTutorial:false, tutPage:0, showSaveMenu:false, showMissions:false, missionsTab:'daily',
   achievementProgress:{}, achievementClaimed:{},
   openEffect:null, openLabHero:null,
-
-  // ── CAMPAIGN STATE ───────────────────────────────────────────
-  campaignActive:false,
-  campaignRoom:0,
-  campaignRooms:[null,null,null,null,null],
-  campaignHeroes:null,
-  campaignGoldEarned:0,
-  campaignWaterEarned:0,
-  campaignRubiesEarned:0,
+  CAMPS:['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'],
   lvls:{ core:1, mine:1, well:1, storage:1, tank:1, lab:1, shaman:0, kCamp:1, aCamp:1, dCamp:1, mCamp:1, sCamp:1, oCamp:1, miCamp:1, gCamp:1, ppCamp:1, piCamp:1, hwCamp:1, drCamp:1, hCamp:1, vsCamp:1 },
   heroLvls:{ kCamp:1, aCamp:1, dCamp:1, mCamp:1, sCamp:1, oCamp:1, miCamp:1, gCamp:1, ppCamp:1, piCamp:1, hwCamp:1, drCamp:1, hCamp:1, vsCamp:1 },
   heroMoves:{ kCamp:{unlocked:[],equipped:[]}, aCamp:{unlocked:[],equipped:[]}, dCamp:{unlocked:[],equipped:[]}, mCamp:{unlocked:[],equipped:[]}, sCamp:{unlocked:[],equipped:[]}, oCamp:{unlocked:[],equipped:[]}, miCamp:{unlocked:[],equipped:[]}, gCamp:{unlocked:[],equipped:[]}, ppCamp:{unlocked:[],equipped:[]}, piCamp:{unlocked:[],equipped:[]}, hwCamp:{unlocked:[],equipped:[]}, drCamp:{unlocked:[],equipped:[]}, hCamp:{unlocked:[],equipped:[]}, vsCamp:{unlocked:[],equipped:[]} },
@@ -2205,7 +2134,7 @@ function G() { return {
   activeEvent:null,
   eventTimerPct:100,
   _eventTimer:null,
-  invasionBattle:false,
+  invasionBattle:false, dungeonBattle:false, dungeonState:null,
 
   // ── MISSIONS STATE ───────────────────────────────────────────
   dailyMissions:[], missionProgress:{}, missionClaimed:{}, missionDate:null, missionCountdown:'00:00:00',
@@ -2224,7 +2153,7 @@ function G() { return {
     { id:'levelup1',    title:'Entrenamiento diario',    desc:'Sube de nivel a un héroe.',                          goal:1,  type:'levelup',     emoji:'📈', reward:{gold:700, water:0,   rubies:0} },
     { id:'levelup3',    title:'Maestro entrenador',      desc:'Sube de nivel a héroes 3 veces.',                   goal:3,  type:'levelup',     emoji:'🌟', reward:{gold:1400,water:500, rubies:0} },
     { id:'equip1',      title:'Armamento listo',         desc:'Equipa 1 movimiento a cualquier héroe.',             goal:1,  type:'equip',       emoji:'🗡️', reward:{gold:200, water:500, rubies:0} },
-    { id:'team3',       title:'Equipo completo',         desc:'Forma un equipo de 3 héroes.',                       goal:1,  type:'team3',       emoji:'🧑‍🤝‍🧑', reward:{gold:700, water:700, rubies:0} },
+    { id:'team3',       title:'Equipo completo',         desc:'Forma un equipo de 4 héroes.',                       goal:1,  type:'team3',       emoji:'🧑‍🤝‍🧑', reward:{gold:700, water:700, rubies:0} },
     { id:'goldmax',     title:'Cofres llenos',           desc:'Acumula el máximo de oro posible.',                  goal:1,  type:'goldmax',     emoji:'💰', reward:{gold:0,   water:1000,rubies:0} },
     { id:'watermax',    title:'Reservas de agua',        desc:'Acumula el máximo de agua posible.',                 goal:1,  type:'watermax',    emoji:'🌊', reward:{gold:1000,water:0,   rubies:0} },
     { id:'core_up',     title:'El corazón crece',        desc:'Mejora el Núcleo de tu aldea.',                      goal:1,  type:'core_up',     emoji:'🏰', reward:{gold:2000,water:2000,rubies:1} },
@@ -2257,7 +2186,7 @@ function G() { return {
     { id:'ach_heroes10',  cat:'col',   emoji:'🏕️', title:'Gran ejército',            desc:'Desbloquea 10 héroes.',                                     cond:s=>Object.values(s.HD).filter(h=>h.unlocked).length>=10, reward:{gold:1500, water:1500, rubies:5}  },
     { id:'ach_heroes_all',cat:'col',   emoji:'🌍', title:'Coleccionista completo',    desc:'Desbloquea todos los héroes.',                              cond:s=>Object.values(s.HD).every(h=>h.unlocked),            reward:{gold:3000, water:3000, rubies:10} },
     { id:'ach_research20',cat:'col',   emoji:'⚗️', title:'Laboratorio activo',        desc:'Investiga 20 movimientos en total.',                        cond:s=>(s.achievementProgress.ach_research20||0)>=20,        reward:{gold:500,  water:800,  rubies:2}  },
-    { id:'ach_fullteam',  cat:'col',   emoji:'🗡️', title:'Equipo en forma',           desc:'Ten los 3 héroes del equipo con 4 movimientos equipados.',  cond:s=>s.team.length===3&&s.team.every(h=>(s.heroMoves[h]?.equipped||[]).length===4), reward:{gold:600, water:600, rubies:2} },
+    { id:'ach_fullteam',  cat:'col',   emoji:'🗡️', title:'Equipo en forma',           desc:'Ten los 4 héroes del equipo con 4 movimientos equipados.',  cond:s=>s.team.length===4&&s.team.every(h=>(s.heroMoves[h]?.equipped||[]).length===4), reward:{gold:600, water:600, rubies:2} },
     // ── COMBATE ───────────────────────────────────────────────
     { id:'ach_wins50',    cat:'fight', emoji:'🏆', title:'Guerrero persistente',      desc:'Gana 50 batallas.',                                         cond:s=>s.wins>=50,   reward:{gold:500,  water:500,  rubies:2}  },
     { id:'ach_wins200',   cat:'fight', emoji:'💀', title:'Azote del campo de batalla',desc:'Gana 200 batallas.',                                        cond:s=>s.wins>=200,  reward:{gold:2000, water:2000, rubies:5}  },
@@ -2273,20 +2202,20 @@ function G() { return {
 
   // ── HERO DATA ────────────────────────────────────────────────
   HD: {
-    kCamp: { name:'Caballero',            emoji:'⚔️',  unlocked:true,  stats:{ hp:100, atk:90,  def:110, spatk:35, spdef:80, spd:80  } },
-    aCamp: { name:'Arquera',              emoji:'🏹',  unlocked:true,  stats:{ hp:70,  atk:110, def:60,  spatk:70, spdef:60, spd:120 }, passive:{ id:'archer_agility', desc:'Movimientos ágiles: Cada vez que la Arquera golpea y hace daño, gana Agilidad+ durante 3 turnos (40% de esquiva). El efecto no se acumula ni refresca: debe expirar antes de poder reactivarse.' } },
-    dCamp: { name:'Lobo',                 emoji:'🐺',  unlocked:true,  stats:{ hp:80,  atk:115, def:60,  spatk:60, spdef:70, spd:115 } },
-    mCamp: { name:'Mago',                 emoji:'🧙',  unlocked:false, stats:{ hp:70,  atk:40,  def:50,  spatk:130,spdef:95, spd:100 } },
-    sCamp: { name:'Slime Colosal',        emoji:'🟢',  unlocked:false, stats:{ hp:200, atk:45,  def:60,  spatk:45, spdef:60, spd:30  } },
-    oCamp: { name:'Orco',                 emoji:'🧌',  unlocked:false, stats:{ hp:120, atk:125, def:75,  spatk:35, spdef:85, spd:60  } },
-    miCamp:{ name:'Mímico',              emoji:'🪆',  unlocked:false, stats:{ hp:70,  atk:90,  def:80,  spatk:95, spdef:80, spd:85  }, passive:{ id:'mimic_deceive', desc:'Maestro del engaño: Cada vez que el Mímico usa un movimiento de estado, engaña al objetivo y sus propias defensas suben un 35% durante 3 turnos.' } },
-    gCamp: { name:'Goblin',               emoji:'👺',  unlocked:false, stats:{ hp:65,  atk:90,  def:65,  spatk:60, spdef:65, spd:130 }, passive:{ id:'goblin_gold', desc:'Codicioso: Gana un 30% más de oro y cada 3 movimientos de daño, el cuarto siempre es crítico.' } },
-    ppCamp:{ name:'Precursor de la Peste',emoji:'🐦‍⬛', unlocked:false, stats:{ hp:80,  atk:60,  def:75,  spatk:90, spdef:90, spd:95  } },
+    kCamp: { name:'Caballero',            emoji:'⚔️',  unlocked:true,  stats:{ hp:100, atk:90,  def:110, spatk:35, spdef:80, spd:80  }, passive:{ id:'knight_perseverance', desc:'Perseverancia: Cada vez que recibe un efecto positivo, de él mismo o cedido por otro, recupera un 25% de su HP máximo por cada efecto.' } },
+    aCamp: { name:'Arquera',              emoji:'🏹',  unlocked:true,  stats:{ hp:70,  atk:110, def:60,  spatk:70, spdef:60, spd:120 }, passive:{ id:'archer_agility',       desc:'Movimientos ágiles: Cada vez que golpea con un movimiento de daño gana Agilidad+ durante 3 turnos (40% de probabilidad de esquivar movimientos). Este efecto no se acumula ni refresca, se vuelve a activar cuando expiran los turnos y vuelve a golpear.' } },
+    dCamp: { name:'Lobo',                 emoji:'🐺',  unlocked:true,  stats:{ hp:80,  atk:115, def:60,  spatk:60, spdef:70, spd:115 }, passive:{ id:'wolf_hunt',           desc:'Instinto de caza: Si el objetivo tiene el 50% o menos de su HP máximo, los movimientos físicos hacen un 20% de daño extra.' } },
+    mCamp: { name:'Mago',                 emoji:'🧙',  unlocked:false, stats:{ hp:70,  atk:40,  def:50,  spatk:130,spdef:95, spd:100 }, passive:{ id:'mage_concentration',   desc:'Concentración mágica: El primer movimiento que golpee al objetivo hace un 20% de daño extra. Este efecto desaparece hasta que el Mago se retire, vuelva a entrar en combate y se enfrente a un objetivo diferente.' } },
+    sCamp: { name:'Slime Colosal',        emoji:'🟢',  unlocked:false, stats:{ hp:200, atk:45,  def:60,  spatk:45, spdef:60, spd:30  }, passive:{ id:'slime_absorb',        desc:'Absorción: Inmune a los golpes críticos. Si recibe un crítico, hace daño normal y el daño extra del crítico se convierte en curación.' } },
+    oCamp: { name:'Orco',                 emoji:'🧌',  unlocked:false, stats:{ hp:120, atk:125, def:75,  spatk:35, spdef:85, spd:60  }, passive:{ id:'orc_armorbreak',       desc:'Rompe armaduras: Si quita el 30% o más del HP máximo del objetivo de un golpe, aplica Defensa- un 35% durante 2 turnos.' } },
+    miCamp:{ name:'Mímico',              emoji:'🪆',  unlocked:false, stats:{ hp:70,  atk:90,  def:80,  spatk:95, spdef:80, spd:85  }, passive:{ id:'mimic_deceive',        desc:'Maestro del engaño: Cada vez que usa un movimiento de estado, aumenta Defensa+ y Defensa especial+ un 35% durante 3 turnos.' } },
+    gCamp: { name:'Goblin',               emoji:'👺',  unlocked:false, stats:{ hp:65,  atk:95,  def:60,  spatk:70, spdef:60, spd:130 }, passive:{ id:'goblin_gitaneo',       desc:'Gitaneo: El cuarto movimiento de daño siempre asestará un golpe crítico. Recauda un 30% de oro extra de todos los combates si está en el equipo.' } },
+    ppCamp:{ name:'Precursor de la Peste',emoji:'🐦‍⬛', unlocked:false, stats:{ hp:80,  atk:60,  def:75,  spatk:90, spdef:90, spd:95  }, passive:{ id:'pest_contagio',       desc:'Contagio: Cuando el objetivo muere con al menos 2 efectos negativos activos, esos efectos se transfieren al siguiente objetivo con la mitad de turnos restantes. El Precursor debe estar en campo sin morir.' } },
     piCamp:{ name:'Pícara',               emoji:'🗡️',  unlocked:false, stats:{ hp:70,  atk:125, def:55,  spatk:80, spdef:55, spd:125 } },
     hwCamp:{ name:'Hombre Lobo',          emoji:'🌕',  unlocked:false, stats:{ hp:85,  atk:120, def:60,  spatk:70, spdef:80, spd:95  } },
-    drCamp:{ name:'Druida',               emoji:'🌿',  unlocked:false, stats:{ hp:100, atk:45,  def:70,  spatk:80, spdef:110,spd:80  } },
-    hCamp: { name:'Hemodus',              emoji:'🦇',  unlocked:false, stats:{ hp:70,  atk:90,  def:65,  spatk:60, spdef:65, spd:130 } },
-    vsCamp:{ name:'Vampiro Superior',     emoji:'🧛',  unlocked:false, stats:{ hp:90,  atk:100, def:80,  spatk:100,spdef:80, spd:60  }, passive:{ id:'vs_blood', desc:'Si el objetivo está sangrando, los movimientos físicos restauran un 10% del HP máximo al golpear y los especiales hacen un 15% de daño extra.' } },
+    drCamp:{ name:'Druida',               emoji:'🌿',  unlocked:false, stats:{ hp:100, atk:45,  def:70,  spatk:80, spdef:110,spd:80  }, passive:{ id:'druid_roots',   desc:'Raíces de vida: Cada vez que entra en combate recupera un 25% de su HP máximo.' } },
+    hCamp: { name:'Hemodus',              emoji:'🦇',  unlocked:false, stats:{ hp:70,  atk:90,  def:65,  spatk:60, spdef:65, spd:130 }, passive:{ id:'hemo_echoloc', desc:'Ecolocalización: Sus movimientos de estado nunca fallan. Si el objetivo tiene algún efecto negativo activo, sus movimientos de daño tampoco fallan.' } },
+    vsCamp:{ name:'Vampiro Superior',     emoji:'🧛',  unlocked:false, stats:{ hp:90,  atk:100, def:80,  spatk:100,spdef:80, spd:60  }, passive:{ id:'vs_blood',             desc:'Sed de sangre: Si el objetivo tiene sangrado activo, todos los movimientos físicos absorben un 15% del daño causado y todos los movimientos especiales hacen un 15% de daño extra. El drenaje se suma al de movimientos que ya roban vida.' } },
   },
 
   HERO_MOVES: {
@@ -2311,7 +2240,7 @@ function G() { return {
     'm_fuego':         { name:'Bola de fuego',        power:65,  type:'special',  precision:0.95, desc:'Bola de fuego que quema al objetivo, 3 turnos.', effects:[{id:'burn',target:'enemy',turns:3}], heroLvl:1, labLvl:1, cost:50 },
     'm_hielo':         { name:'Bola de hielo',        power:65,  type:'special',  precision:0.95, desc:'Bola de hielo que congela al objetivo, 2 turnos. Recarga: 5 turnos.', effects:[{id:'freeze',target:'enemy',turns:2}], heroLvl:5, labLvl:2, cost:75, cooldown:5 },
     'm_electrica':     { name:'Bola eléctrica',       power:65,  type:'special',  precision:0.95, desc:'Bola de electricidad que ralentiza al objetivo, 4 turnos.', effects:[{id:'slow',target:'enemy',turns:4}], heroLvl:10, labLvl:2, cost:100 },
-    'm_escudo':        { name:'Escudo mágico',        power:0,   type:'status',   precision:1.00, desc:'Escudo que protege al usuario de todo daño, 2 turnos.', effects:[{id:'protection',target:'self',turns:2}], heroLvl:15, labLvl:3, cost:120 },
+    'm_escudo':        { name:'Escudo mágico',        power:0,   type:'status',   precision:1.00, desc:'Crea un escudo mágico que protege al usuario de todo el daño y efectos de estado, 2 turnos.', effects:[{id:'protection',target:'self',turns:2}], heroLvl:15, labLvl:3, cost:120 },
     'm_choque':        { name:'Choque mental',        power:95,  type:'special',  precision:0.95, desc:'Golpe mágico muy potente.', effects:[], heroLvl:20, labLvl:3, cost:500 },
     'm_concentracion': { name:'Concentración mental', power:0,   type:'status',   precision:1.00, desc:'El usuario se concentra aumentando su ataque especial 40% y defensa especial 35%, 5 turnos.', effects:[{id:'spatk_up',target:'self',turns:5},{id:'spdef_up',target:'self',turns:5}], heroLvl:25, labLvl:4, cost:180 },
     'm_teleport':      { name:'Teletransportación',   power:0,   type:'status',   precision:1.00, priority:2, desc:'El usuario se teletransporta y se cambia por otro héroe, prioridad +2.', effects:[{id:'swap',target:'self'}], heroLvl:30, labLvl:4, cost:220 },
@@ -2477,6 +2406,13 @@ function G() { return {
   _heroLvl(hid, mvKey){ return this.MD[mvKey]?.heroLvl ?? 1; },
 
   ENEMY_POOL: ['oCamp','miCamp','gCamp','ppCamp','hCamp'],
+  DUNGEONS:[
+    {id:'d_forest',   name:'Bosque Sombrío',           emoji:'🌲', coreReq:1, rooms:5,  lvlOffset:0, eliteBoost:1.20, bossBoost:1.30, rewardMult:1.0, completionRubies:3},
+    {id:'d_catacombs',name:'Catacumbas Olvidadas',      emoji:'⚰️', coreReq:2, rooms:7,  lvlOffset:2, eliteBoost:1.25, bossBoost:1.35, rewardMult:1.4, completionRubies:4},
+    {id:'d_swamp',    name:'Pantano Tóxico',            emoji:'🌿', coreReq:4, rooms:7,  lvlOffset:4, eliteBoost:1.25, bossBoost:1.40, rewardMult:1.8, completionRubies:5},
+    {id:'d_burned',   name:'Tierras Abrasadas',         emoji:'🔥', coreReq:6, rooms:9,  lvlOffset:6, eliteBoost:1.30, bossBoost:1.45, rewardMult:2.2, completionRubies:6},
+    {id:'d_abyss',    name:'Abismo de Piedras Rúnicas', emoji:'🪨', coreReq:8, rooms:10, lvlOffset:8, eliteBoost:1.35, bossBoost:1.50, rewardMult:2.8, completionRubies:8},
+  ],
   FUSIONS:[
     { result:'piCamp', mats:['kCamp','aCamp'], color:'#c084fc' },
     { result:'hwCamp', mats:['kCamp','dCamp'], color:'#f97316' },
@@ -2808,7 +2744,7 @@ function G() { return {
     const wm=this.dailyMissions.find(m=>m.id==='watermax');
     if(wm&&!this.missionClaimed['watermax']&&this.water>=this.maxWater){ if((this.missionProgress['watermax']||0)<1){ this.missionProgress['watermax']=1; this.notif('📜 Reservas de agua!','#e8c46a'); this.save(); } }
     const t3=this.dailyMissions.find(m=>m.id==='team3');
-    if(t3&&!this.missionClaimed['team3']&&this.team.length>=3){ if((this.missionProgress['team3']||0)<1){ this.missionProgress['team3']=1; this.notif('📜 Equipo completo!','#e8c46a'); this.save(); } }
+    if(t3&&!this.missionClaimed['team3']&&this.team.length>=4){ if((this.missionProgress['team3']||0)<1){ this.missionProgress['team3']=1; this.notif('📜 Equipo completo!','#e8c46a'); this.save(); } }
   },
   claimMission(id){
     const m=this.dailyMissions.find(m=>m.id===id); if(!m||this.missionClaimed[id]) return;
@@ -2862,7 +2798,7 @@ function G() { return {
       this.heroMoves[hid].unlocked=this.heroMoves[hid].unlocked.filter(mv=>!!this.MD[mv]);
       this.heroMoves[hid].equipped=this.heroMoves[hid].equipped.filter(mv=>!!this.MD[mv]).slice(0,4);
     }
-    for(const hid of ['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp']){
+    for(const hid of this.CAMPS){
       const pool=this.HERO_MOVES[hid]; if(pool&&pool.length>0){
         const first=pool[0];
         if(!this.heroMoves[hid].unlocked.includes(first)) this.heroMoves[hid].unlocked.push(first);
@@ -2899,6 +2835,7 @@ function G() { return {
       marketDailyDate:this.marketDailyDate, marketDailyUsed:this.marketDailyUsed,
       marketHistory:this.marketHistory.slice(-10),
       rubyLevelsEarned:this.rubyLevelsEarned,
+      dungeonState:this.dungeonState||null,
     }));
     this.hasSave = true;
   },
@@ -2940,6 +2877,7 @@ function G() { return {
     if(d.marketDailyUsed) this.marketDailyUsed=d.marketDailyUsed||0;
     if(d.marketHistory) this.marketHistory=d.marketHistory||[];
     if(d.rubyLevelsEarned) this.rubyLevelsEarned=[...d.rubyLevelsEarned];
+    if(d.dungeonState) this.dungeonState=d.dungeonState;
     this.hasSave=true;
     return true;
   },
@@ -2963,7 +2901,7 @@ function G() { return {
   coreReq(){
     const cur=this.lvls.core; const maxInfra=cur+1; const maxCamp=cur;
     const infraOk=this.lvls.mine>=maxInfra&&this.lvls.well>=maxInfra&&this.lvls.storage>=maxInfra&&this.lvls.tank>=maxInfra&&this.lvls.lab>=maxInfra&&(cur<3||this.lvls.shaman>=maxInfra);
-    const unlockedCamps=['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'].filter(h=>this.HD[h].unlocked);
+    const unlockedCamps=this.CAMPS.filter(h=>this.HD[h].unlocked);
     const campsOk=unlockedCamps.every(h=>this.lvls[h]>=maxCamp);
     const heroesAtMax=unlockedCamps.filter(h=>(this.heroLvls[h]||1)>=this.heroMaxLvl(h));
     const heroesRequired=Math.min(3,unlockedCamps.length);
@@ -2981,16 +2919,14 @@ function G() { return {
     return { desc:missing.join(' · '), check:()=>infraOk&&campsOk&&heroesOk };
   },
   maxLvl(k){
-    const heroes=['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'];
-    if(heroes.includes(k)) return this.lvls.core;
+    if(this.CAMPS.includes(k)) return this.lvls.core;
     if(k==='shaman') return this.lvls.core>=3 ? this.lvls.core+1 : 0;
     return this.lvls.core+1;
   },
   coreInfo(){ this.tutPage=0; this.showTutorial=true; },
   upgrade(k){
     if(this.lvls[k]>=this.maxLvl(k)){
-      const heroes=['kCamp','aCamp','dCamp','mCamp','sCamp','oCamp','miCamp','gCamp','ppCamp','piCamp','hwCamp','drCamp','hCamp','vsCamp'];
-      return this.notif(heroes.includes(k)?`Sube el Núcleo para mejorar el Camp`:`Sube el Núcleo para seguir mejorando`,'#f97316');
+      return this.notif(this.CAMPS.includes(k)?`Sube el Núcleo para mejorar el Camp`:`Sube el Núcleo para seguir mejorando`,'#f97316');
     }
     if(k==='core'){
       if(this.lvls.core>=10) return this.notif('¡Núcleo al máximo!','#e8c46a');
@@ -3033,7 +2969,7 @@ function G() { return {
       if(this.team.length<=1) return this.notif('Mínimo 1 héroe','#f97316');
       this.team=this.team.filter(x=>x!==hid);
     } else {
-      if(this.team.length>=3) return this.notif('Máximo 3 héroes','#f97316');
+      if(this.team.length>=4) return this.notif('Máximo 4 héroes','#f97316');
       this.team.push(hid);
     }
     this.checkPassiveMissions(); this.save();
@@ -3092,13 +3028,18 @@ function G() { return {
   _maxHeroLvl(){
     return Math.max(...this.team.map(h => this.heroLvls[h]||1));
   },
-  _enemyCap(){ return this._maxHeroLvl() + 3; },
+  _enemyCap(round){
+    const r = round ?? (this.wins + 1);
+    const size = this._isBossRound(r) ? 1 : this._waveSize(r);
+    return this._maxHeroLvl() + (size === 1 ? 3 : 2);
+  },
   _isBossRound(round){ return round > 0 && round % 10 === 0; },
   _waveSize(round){
     if(this._isBossRound(round)) return 1;
     if(round <= 5)  return 1;
-    if(round <= 16) return 2;
-    return 3;
+    if(round <= 14) return 2;
+    if(round <= 24) return 3;
+    return 4;
   },
   _buildInvasionWave(){
     const eLvl = this._maxHeroLvl() + 2;
@@ -3140,9 +3081,9 @@ function G() { return {
     const campId  = this.ENEMY_POOL[Math.floor(Math.random()*this.ENEMY_POOL.length)];
     const h = this.HD[campId];
     const moves = this._pickEnemyMoves(campId);
-    const boost = s => Math.floor(s * 1.10);
+    const boost = s => Math.floor(s * 1.20);
     return {
-      id:campId, name:'⚡ '+h.name, emoji:h.emoji, level:bossLvl, isBoss:true,
+      id:campId, name:'👑 '+h.name, emoji:h.emoji, level:bossLvl, isBoss:true,
       hp:     boost(this.calcHp(h.stats.hp,   bossLvl)),
       atk:    boost(this.calcStat(h.stats.atk,  bossLvl)),
       def:    boost(this.calcStat(h.stats.def,  bossLvl)),
@@ -3162,16 +3103,18 @@ function G() { return {
     }
     const size    = this._waveSize(round);
     const heroLvl = this._maxHeroLvl();
-    // Cap por posición según tamaño de oleada
-    // 1 enemigo: único a máx heroLvl+3
-    // 2 enemigos: [heroLvl+2, heroLvl+3]
-    // 3 enemigos: [heroLvl+1, heroLvl+2, heroLvl+3]
-    const caps = size === 1 ? [heroLvl+3]
-               : size === 2 ? [heroLvl+2, heroLvl+3]
-               :               [heroLvl+1, heroLvl+2, heroLvl+3];
+    // Offsets y caps por posición según tamaño de oleada
+    const offsets = size === 1 ? [0]
+                  : size === 2 ? [0, 1]
+                  : size === 3 ? [-1, 0, 1]
+                  :               [-1, 0, 0, 1];
+    const caps    = size === 1 ? [heroLvl+3]
+                  : size === 2 ? [heroLvl+2, heroLvl+3]
+                  : size === 3 ? [heroLvl+1, heroLvl+2, heroLvl+3]
+                  :               [heroLvl+1, heroLvl+2, heroLvl+2, heroLvl+3];
     const pool = [...this.ENEMY_POOL].sort(() => Math.random() - 0.5).slice(0, size);
     return pool.map((campId, i) => {
-      const lvl = Math.max(1, Math.min(this.enemyLevel + i, caps[i]));
+      const lvl = Math.max(1, Math.min(this.enemyLevel + offsets[i], caps[i]));
       const e = this._buildEnemy(campId, lvl);
       e.currentHp = e.hp;
       return e;
@@ -3180,24 +3123,33 @@ function G() { return {
 
   _initBattle(){
     const round     = this.wins + 1;
-    const bossRound = !this.invasionBattle && this._isBossRound(round);
+    const bossRound = !this.invasionBattle && !this.dungeonBattle && this._isBossRound(round);
     this._ended=false; this.result=null; this.log=[]; this.activeIdx=0;
     this.switching=false; this.forcedSwitch=false; this.pAnim='idle'; this.eAnim='eidle';
     this.activeEffects={ player:[], enemy:[] };
-    this.waveQueue = this.invasionBattle ? this._buildInvasionWave() : this._buildWave();
+    this.waveQueue = this.invasionBattle ? this._buildInvasionWave()
+      : this.dungeonBattle ? this._buildDungeonRoomWave()
+      : this._buildWave();
     this.waveTotal = this.waveQueue.length;
+    const dungeonFloor = this.dungeonBattle ? (this.dungeonState?.floor??0) : 0;
+    const heroList = this.dungeonBattle && this.dungeonState
+      ? this.dungeonState.heroes.map(h=>({...h}))
+      : this.team.map(hid=>{ const h=this.HD[hid]; const cs=this.calcStats(hid); return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, moves:this.heroMoves[hid]?.equipped||[], level:this.heroLvls[hid]||1, hp:cs.hp, maxHp:cs.hp, atk:cs.atk, def:cs.def, spatk:cs.spatk, spdef:cs.spdef, spd:cs.spd }; });
     this.bat={ eHp:0, eMax:0, cooldowns:{}, swapCb:null, goblinFielded:false, goblinDmgCount:0, goblinEnemyDmgCount:0, enemyLastPlayerSetup:false, activeEnemyIdx:0, enemySwitchCd:0, lastEnemyMoveUsed:null,
+      magoFirstHitReady:true, magoLastEnemyIdx:-1, magoEnemyFirstHitReady:true, magoEnemyLastHeroIdx:-1, contagioTransfer:null,
       protectionCd:{player:0,enemy:0}, freezeImmune:{player:0,enemy:0}, heroDecomp:{}, flinched:{player:false,enemy:false}, parryActive:false, deathCb:null,
       redistData:null, receivedSpecialDmg:false, lastEnemyDmg:0, reboteRawDmg:0, reboteType:'physical',
       cigarroData:null, caraoCruzData:null, cagonTransfer:null, sinfoniaTransfer:false,
-      isBossRound: bossRound, isInvasion: this.invasionBattle,
-      heroes:this.team.map(hid=>{ const h=this.HD[hid]; const cs=this.calcStats(hid); return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, moves:this.heroMoves[hid]?.equipped||[], level:this.heroLvls[hid]||1, hp:cs.hp, maxHp:cs.hp, atk:cs.atk, def:cs.def, spatk:cs.spatk, spdef:cs.spdef, spd:cs.spd }; }) };
+      isBossRound: bossRound, isInvasion: this.invasionBattle, isDungeon: this.dungeonBattle, dungeonFloor,
+      heroes: heroList };
     this.battleStats={ dmg:0, crits:0, efx:0, turns:0, heroContrib:{} };
-    for(const hid of this.team) this.battleStats.heroContrib[hid]=0;
+    for(const h of this.bat.heroes) this.battleStats.heroContrib[h.id]=0;
     if(this.bat.heroes[0]?.id==='gCamp') this.bat.goblinFielded=true;
     if(bossRound) this._log(`👑 ¡RONDA JEFE! Ronda ${round}`,'color:#f87171');
     if(this.invasionBattle) this._log(`💀 ¡INVASIÓN! 4 enemigos Nv.${this._maxHeroLvl()+1}`,'color:#f87171');
+    if(this.dungeonBattle){ const room=this.dungeonState.map[dungeonFloor]; const total=this.dungeonState.map.length; this._log(`🗺️ Sala ${dungeonFloor+1}/${total} — ${room.type==='boss'?'👑 JEFE FINAL':room.type==='elite'?'💀 Élite':'⚔️ Combate'}`,'color:var(--gold)'); }
     this._loadEnemy(0);
+    this._onHeroEnter();
   },
   _loadEnemy(idx){
     const e = this.waveQueue[idx];
@@ -3213,14 +3165,19 @@ function G() { return {
       this.activeEffects.player = this.activeEffects.player.filter(ex=>ex.id!=='trap');
       this._log(`🪤 El héroe queda libre — la Prensa ha cesado`,'color:var(--muted)');
     }
-    // Transferir congelación activa al entrante
-    const frozenFx = this.activeEffects.enemy.find(ex=>ex.id==='freeze');
     this.activeEffects.enemy = [];
-    if(frozenFx){ this.activeEffects.enemy.push({...frozenFx}); this._log(`🧊 ¡El entrante ${e.name} hereda la congelación!`,'color:#7dd3fc'); }
+    this.bat.freezeImmune.enemy = 0;
+    this.bat.protectionCd.enemy = 0;
+    // Pasiva Precursor (Contagio): aplicar efectos propagados al nuevo enemigo
+    if(this.bat.contagioTransfer?.length){
+      for(const ef of this.bat.contagioTransfer) this._applyEffect(ef.id,'enemy',ef.turns,false);
+      this._log(`🐦‍⬛ Contagio: efectos propagados a ${e.name}`,'color:#86efac');
+      this.bat.contagioTransfer=null;
+    }
     const pos  = idx + 1;
     const wave = this.waveTotal > 1 ? ` (${pos}/${this.waveTotal})` : '';
-    if(e.isBoss) this._log(`💀 ¡¡JEFE!! ${e.name} Nv.${e.level} — Stats +10%`,'color:#f87171','room');
-    else         this._log(`⚔️ ¡${e.name} Nv.${e.level} aparece${wave}!`,'color:var(--gold)','room');
+    if(e.isBoss) this._log(`💀 ¡¡JEFE!! ${e.name} Nv.${e.level} — Stats +20%`,'color:#f87171');
+    else         this._log(`⚔️ ¡${e.name} Nv.${e.level} aparece${wave}!`,'color:var(--gold)');
     this.waiting = true;
   },
   _clearPFx(){
@@ -3261,12 +3218,22 @@ function G() { return {
       this._log(`🪤 El objetivo queda libre — la Prensa ha cesado`,'color:var(--muted)');
     }
     this.activeEffects.player = [];
+    this.bat.freezeImmune.player = 0;
+    this.bat.protectionCd.player = 0;
   },
   _restoreHeroDecomp(){
     const hero = this.bat?.heroes[this.activeIdx];
     if(!hero || !this.bat?.heroDecomp?.[hero.id]) return;
     this.activeEffects.player.push({ id:'decomp', turns:-1, stacks:1 });
     this._log(`🦠 ${hero.name}: Descomposición sigue activa (reiniciada)`,'color:#a3e635');
+  },
+  // Pasiva Druida (Raíces de vida): cura 25% HP máx cada vez que entra en combate
+  _onHeroEnter(){
+    const h = this.AF();
+    if(!h || h.id!=='drCamp') return;
+    const heal = Math.floor(h.maxHp * 0.25);
+    h.hp = Math.min(h.maxHp, h.hp + heal);
+    this._log(`🌿 Raíces de vida: ${h.name} recupera ${heal} HP al entrar`,'color:#4ade80');
   },
   _effAtk(base, who, isSpecial=false){
     const fx = this.activeEffects[who]; let m = 1;
@@ -3309,6 +3276,10 @@ function G() { return {
     if(id==='protection'){
       if(this.bat.protectionCd[who]>0){ this._log(`🔵 ${nm} no puede recibir Protección aún (${this.bat.protectionCd[who]}t)`,'color:#38bdf8'); return; }
     }
+    // Escudo mágico: bloquea efectos negativos entrantes
+    if(this.NEGATIVE_EFX.includes(id) && this.activeEffects[who].some(e=>e.id==='protection')){
+      this._log(`🔵 ${nm}: Protección bloquea ${id}`,'color:#38bdf8'); return;
+    }
     if(id==='freeze'){
       if(this.bat.freezeImmune[who]>0){ this._log(`❄️ ${nm} es inmune a la congelación (${this.bat.freezeImmune[who]}t)`,'color:#7dd3fc'); return; }
     }
@@ -3340,6 +3311,21 @@ function G() { return {
       if(this.NEGATIVE_EFX.includes(id)){ this.negEffApplied++; if(!this.HD.ppCamp.unlocked&&this.negEffApplied>=100){ this.HD.ppCamp.unlocked=true; this.notif('🐦‍⬛ ¡Precursor de la Peste desbloqueado!','#86efac'); } }
     }
     if(fromPlayer && who==='player') this.trackMission('apply_self');
+
+    // Pasiva Caballero (Perseverancia): cura 25% HP máx por cada efecto positivo recibido
+    if(this.POSITIVE_EFX.includes(id)){
+      if(who==='player' && this.AF()?.id==='kCamp'){
+        const h=this.AF(); const heal=Math.floor(h.maxHp*0.25);
+        h.hp=Math.min(h.maxHp,h.hp+heal);
+        this._log(`🛡️ Perseverancia: +${heal} HP`,'color:#fbbf24');
+      }
+      if(who==='enemy' && this.enemy?.id==='kCamp'){
+        const heal=Math.floor(this.bat.eMax*0.25);
+        this.bat.eHp=Math.min(this.bat.eMax,this.bat.eHp+heal);
+        this.enemy.hp=this.bat.eHp;
+        this._log(`🛡️ Perseverancia: +${heal} HP`,'color:#fbbf24');
+      }
+    }
 
     const ef = this.EFFECTS.find(e=>e.id===id);
     this._log(`${ef?.emoji||'✨'} ${nm}: ${ef?.name||id}${turns>0?' ('+turns+'t)':''}`, `color:${ef?.color||'#ddd'}`);
@@ -3460,13 +3446,13 @@ function G() { return {
     const h=this.AF();
     if(playerDied || (h&&h.hp<=0)){
       if(h) h.hp=0;
-      this._log(`💀 ${h?.name||'Héroe'} ha caído por daño de estado!`,'color:var(--danger)','death');
+      this._log(`💀 ${h?.name||'Héroe'} ha caído por daño de estado!`,'color:var(--danger)');
       if(!this._heroFallen(()=>{ if(!this._ended) applyDots('enemy'); })) return;
     }
     if(this._ended) return;
     applyDots('enemy');
   },
-  _log(t,s='',type=''){ this.log.push({t,s,type}); this.$nextTick(()=>{ const el=document.getElementById('blog'); if(el) el.scrollTop=el.scrollHeight; }); },
+  _log(t,s=''){ this.log.push({t,s}); this.$nextTick(()=>{ const el=document.getElementById('blog'); if(el) el.scrollTop=el.scrollHeight; }); },
   _dmg(power,atk,def,lvl,critChance=0.0625){ if(power<=0) return {dmg:0,crit:false}; const rand=0.85+Math.random()*0.15; const crit=Math.random()<critChance; const dmg=Math.max(1,Math.floor(((2*lvl/5+2)*power*(atk/Math.max(def,1))/50+2)*(crit?1.5:1)*rand)); return {dmg,crit}; },
   switchHero(i){
     if(this.anim||(!this.waiting&&!this.forcedSwitch)||this._ended) return;
@@ -3476,8 +3462,13 @@ function G() { return {
       this.notif(`🪤 ¡${this.AF().name} está atrapado y no puede cambiar!`,'#f59e0b'); return;
     }
     const prev=this.AF().name;
+    // Pasiva Mago (Concentración mágica): al salir, guardar el enemigo al que se enfrentaba
+    if(this.AF()?.id==='mCamp') this.bat.magoLastEnemyIdx = this.bat.activeEnemyIdx;
     this._clearPFx(); this.activeIdx=i;
+    // Pasiva Mago: al entrar, activar bonus solo si el enemigo es diferente al último que enfrentó
+    if(this.AF()?.id==='mCamp') this.bat.magoFirstHitReady = (this.bat.activeEnemyIdx !== this.bat.magoLastEnemyIdx);
     this._restoreHeroDecomp();
+    this._onHeroEnter();
     // Aplicar efectos transferidos por Cagón al nuevo héroe
     if(this.bat.cagonTransfer){
       for(const ef of this.bat.cagonTransfer) this._applyEffect(ef.id,'player',ef.turns,false);
@@ -3541,7 +3532,7 @@ function G() { return {
     if(this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
     const h=this.AF();
     if(h&&h.hp<=0){
-      h.hp=0; this._log(`💀 ${h.name} ha caído por daño de estado!`,'color:var(--danger)','death');
+      h.hp=0; this._log(`💀 ${h.name} ha caído por daño de estado!`,'color:var(--danger)');
       const contAfterDeath = () => this._endTurnTick();
       if(!this._heroFallen(contAfterDeath)) return;
     }
@@ -3589,7 +3580,6 @@ function G() { return {
       }
     }
     this._tickEffects();
-    this._log('','','sep');
     this.anim=false; this.waiting=true;
   },
   // ══════════════════════════════════════════════════════════════
@@ -3616,7 +3606,7 @@ function G() { return {
     const defDefeated = (cont) => {
       if(isP){ this.bat.eHp=0; this._playerDotsOnly(); this._win(); return false; }
       defHero.hp=0;
-      this._log(`💀 ${defHero.name} ha caído!`,'color:var(--danger)','death');
+      this._log(`💀 ${defHero.name} ha caído!`,'color:var(--danger)');
       return this._heroFallen(cont);
     };
 
@@ -3640,12 +3630,16 @@ function G() { return {
       const selfDmg=Math.max(1,Math.floor(aMaxHp*0.15));
       setAHp(Math.max(0,getAHp()-selfDmg));
       this._log(`💫 ¡${atker.name} está aturdido y se golpea a sí mismo! -${selfDmg} HP`,'color:#facc15');
-      if(isP&&atker.hp<=0){ atker.hp=0; this._log(`💀 ${atker.name} ha caído!`,'color:var(--danger)','death'); if(!this._heroFallen(cb)) return; }
+      if(isP&&atker.hp<=0){ atker.hp=0; this._log(`💀 ${atker.name} ha caído!`,'color:var(--danger)'); if(!this._heroFallen(cb)) return; }
       if(!isP&&this.bat.eHp<=0){ this.bat.eHp=0; this._win(); return; }
       setTimeout(cb,700); return;
     }
-    // Precisión
-    const acc = this._hasEffect(side,'acc_up') ? 1.0 : move.precision;
+    // Precisión — Pasiva Hemodus (Ecolocalización): estado nunca falla; daño nunca falla si objetivo tiene negativo
+    const hemoNeverMiss = atker.id==='hCamp' && (
+      move.type==='status' ||
+      (['physical','special'].includes(move.type) && this.activeEffects[opp].some(e=>this.NEGATIVE_EFX.includes(e.id)))
+    );
+    const acc = hemoNeverMiss ? 1.0 : (this._hasEffect(side,'acc_up') ? 1.0 : move.precision);
     if(Math.random()>acc){
       this._log(`💨 ${atker.name} usa ${move.name} → ¡Ha fallado!`,'color:var(--muted)');
       if(!isP && this.bat.parryActive){ this.bat.parryActive=false; this._log(`🛡️ Parry: el movimiento enemigo falló, no hay counter`,'color:var(--muted)'); }
@@ -4016,7 +4010,7 @@ function G() { return {
       if(mataPresasBonus > 1) this._log(`🐾 Mata presas: ×${mataPresasBonus.toFixed(1)} (objetivo al ${Math.round(tgtHpPct*100)}% HP)`,'color:#f97316');
     }
 
-    // ── Pasiva Vampiro Superior: +15% daño especial si objetivo sangra ──
+    // ── Pasiva Vampiro Superior (Sed de sangre): +15% daño especial si objetivo sangra ──
     const oppSide = isP ? 'enemy' : 'player';
     let vsBloodBonus = 1;
     if(isSp && atker.id==='vsCamp' && this.activeEffects[oppSide].some(e=>e.id==='bleed')){
@@ -4032,14 +4026,32 @@ function G() { return {
       if(this.activeEffects[oppSide].some(e=>e.id==='bleed')){ condenaBonus += 0.50; this._log(`💀 Condena: objetivo sangrando +50% daño`,'color:#dc2626'); }
     }
 
+    // ── Pasiva Lobo (Instinto de caza): +20% daño físico si objetivo ≤ 50% HP ──
+    let wolfHuntBonus = 1;
+    if(!isSp && atker.id==='dCamp'){
+      const tgtHpPct = isP ? (this.bat.eHp/this.bat.eMax) : (defHero.hp/defHero.maxHp);
+      if(tgtHpPct <= 0.50){ wolfHuntBonus = 1.20; this._log(`🐺 Instinto de caza: objetivo ≤50% HP — daño físico +20%`,'color:#f97316'); }
+    }
+
+    // ── Pasiva Mago (Concentración mágica): +20% daño en el primer golpe ──
+    let mageConcentrationBonus = 1;
+    if(isP && atker.id==='mCamp' && this.bat.magoFirstHitReady){
+      mageConcentrationBonus = 1.20;
+      this._log(`🧙 Concentración mágica: primer golpe +20% daño`,'color:#60a5fa');
+    }
+    if(!isP && atker.id==='mCamp' && this.bat.magoEnemyFirstHitReady){
+      mageConcentrationBonus = 1.20;
+      this._log(`🧙 Concentración mágica: primer golpe +20% daño`,'color:#60a5fa');
+    }
+
     const critBonus = isP && this._hasEffect('player','crit_up') ? 0.50 : 0;
     // Pasiva Goblin (Codicioso): cada 3 golpes el cuarto es crítico garantizado
     const goblinForceCrit = isP && atker.id==='gCamp' && this.bat.goblinDmgCount > 0 && this.bat.goblinDmgCount % 3 === 0;
     const goblinEnemyForceCrit = !isP && atker.id==='gCamp' && this.bat.goblinEnemyDmgCount > 0 && this.bat.goblinEnemyDmgCount % 3 === 0;
-    if(goblinForceCrit || goblinEnemyForceCrit) this._log(`👺 Codicioso: ¡golpe garantizado crítico!`,'color:#facc15');
+    if(goblinForceCrit || goblinEnemyForceCrit) this._log(`👺 Gitaneo: ¡golpe garantizado crítico!`,'color:#facc15');
     const critChance = (move.alwaysCrit || goblinForceCrit || goblinEnemyForceCrit) ? 1.0 : (0.0625 + critBonus);
     let {dmg,crit} = this._dmg(basePower, atkStat, defStat, atker.level, critChance);
-    dmg = Math.max(1, Math.floor(dmg * necroBonus * devorarBonus * trampaBonus * mataPresasBonus * vsBloodBonus * condenaBonus));
+    dmg = Math.max(1, Math.floor(dmg * necroBonus * devorarBonus * trampaBonus * mataPresasBonus * vsBloodBonus * condenaBonus * wolfHuntBonus * mageConcentrationBonus));
 
     // ── Agilidad: esquivar (solo cuando el enemigo ataca al jugador) ──
     if(!isP && ['physical','special'].includes(move.type) && this._hasEffect('player','agility') && Math.random()<0.40){
@@ -4065,11 +4077,28 @@ function G() { return {
     };
 
     let finalDmg = absorbShield(dmg);
+
+    // Pasiva Slime (Absorción): inmune a críticos — daño normal + curación del extra
+    let slimeAbsorHeal = 0;
+    if(crit && (isP ? this.enemy?.id : defHero?.id)==='sCamp'){
+      const normalDmg = Math.max(1, Math.floor(finalDmg / 1.5));
+      slimeAbsorHeal = finalDmg - normalDmg;
+      finalDmg = normalDmg;
+      crit = false;
+    }
+
     setDHp(Math.max(0, getDHp()-finalDmg));
     this._log(`${atker.name} → ${move.name}: -${finalDmg} HP${crit?' 💥 ¡CRÍTICO!':''}`,
-      crit?'color:var(--gold)':(isP?'':'color:var(--danger)'),
-      crit?'crit':'');
+      crit?'color:var(--gold)':(isP?'':'color:var(--danger)'));
     floatDef('-'+finalDmg, isSp ? '#60a5fa' : '#f87171');
+
+    // Absorción: curar al Slime con el daño del crítico absorbido
+    if(slimeAbsorHeal > 0){
+      if(isP){ this.bat.eHp=Math.min(this.bat.eMax, this.bat.eHp+slimeAbsorHeal); this.enemy.hp=this.bat.eHp; }
+      else   { defHero.hp=Math.min(defHero.maxHp, defHero.hp+slimeAbsorHeal); }
+      this._log(`🟢 Absorción: crítico bloqueado — +${slimeAbsorHeal} HP`,'color:#4ade80');
+      floatDef('+'+slimeAbsorHeal,'#4ade80');
+    }
 
     if(isP){
       if(crit){ this.trackMission('crits'); this.battleStats.crits++; }
@@ -4092,18 +4121,25 @@ function G() { return {
         this._applyEffect('decomp', opp, -1, isP);
         this._log(`☠️ ${atker.name}: ¡Descomposición aplicada!`,'color:#a3e635');
       }
-      // Pasiva Vampiro Superior: cura 10% HP máx en físico si objetivo sangra
+      // Pasiva Mago (Concentración mágica): consumir el bonus tras el primer golpe
+      if(atker.id==='mCamp' && this.bat.magoFirstHitReady){ this.bat.magoFirstHitReady=false; this.bat.magoLastEnemyIdx=this.bat.activeEnemyIdx; }
+      // Pasiva Orco (Rompe armaduras): si golpe ≥ 30% HP máx del objetivo, aplica DEF- 2t
+      if(atker.id==='oCamp' && finalDmg>0 && finalDmg >= this.bat.eMax*0.30){
+        this._applyEffect('def_down','enemy',2,true);
+        this._log(`🧌 Rompe armaduras: golpe ≥30% HP máx — Defensa- 2 turnos`,'color:#fb923c');
+      }
+      // Pasiva Vampiro Superior (Sed de sangre): físicos absorben 15% daño si objetivo sangra
       if(!isSp && atker.id==='vsCamp' && finalDmg>0 && this.activeEffects[oppSide].some(e=>e.id==='bleed')){
-        const vsHeal = Math.floor(atker.maxHp * 0.10);
+        const vsHeal = Math.floor(finalDmg*0.15);
         atker.hp = Math.min(atker.maxHp, atker.hp + vsHeal);
-        this._log(`🧛 Vampiro Superior: drena sangre — +${vsHeal} HP`,'color:#dc2626');
+        this._log(`🧛 Sed de sangre: +${vsHeal} HP`,'color:#dc2626');
         floatAtk('+'+vsHeal,'#dc2626');
       }
-      // Pasiva Arquera: agilidad 3t tras cualquier movimiento de daño (no se acumula)
+      // Pasiva Arquera (Movimientos ágiles): agilidad 3t tras daño (no se acumula)
       if(atker.id==='aCamp' && finalDmg>0 && !this._hasEffect('player','agility')){
         this._applyEffect('agility','player',3,false);
       }
-      // Pasiva Goblin (Codicioso): contador de golpes de daño
+      // Pasiva Goblin (Gitaneo): contador de golpes de daño
       if(atker.id==='gCamp' && finalDmg>0) this.bat.goblinDmgCount++;
     } else {
       this.pAnim='atk'; setTimeout(()=>this.pAnim='idle',350);
@@ -4113,18 +4149,28 @@ function G() { return {
         this.bat.reboteType   = move.type;
         if(isSp) this.bat.receivedSpecialDmg = true;
       }
-      // Pasiva Arquera enemiga: agilidad 3t tras daño (no se acumula)
+      // Pasiva Mago enemigo (Concentración mágica): consumir el bonus tras el primer golpe
+      if(atker.id==='mCamp' && this.bat.magoEnemyFirstHitReady){ this.bat.magoEnemyFirstHitReady=false; this.bat.magoEnemyLastHeroIdx=this.activeIdx; }
+      // Pasiva Orco enemigo (Rompe armaduras): si golpe ≥ 30% HP máx del héroe activo, aplica DEF- 2t
+      if(atker.id==='oCamp' && finalDmg>0){
+        const defHeroMax = defHero.maxHp;
+        if(finalDmg >= defHeroMax*0.30){
+          this._applyEffect('def_down','player',2,false);
+          this._log(`🧌 Rompe armaduras: golpe ≥30% HP máx — Defensa- 2 turnos`,'color:#fb923c');
+        }
+      }
+      // Pasiva Arquera enemiga (Movimientos ágiles): agilidad 3t tras daño (no se acumula)
       if(atker.id==='aCamp' && finalDmg>0 && !this._hasEffect('enemy','agility')){
         this._applyEffect('agility','enemy',3,false);
       }
-      // Pasiva Goblin enemigo: contador de golpes de daño
+      // Pasiva Goblin enemigo (Gitaneo): contador de golpes de daño
       if(atker.id==='gCamp' && finalDmg>0) this.bat.goblinEnemyDmgCount++;
-      // Pasiva Vampiro Superior enemigo: cura 10% HP máx en físico si jugador sangra
+      // Pasiva Vampiro Superior enemigo (Sed de sangre): físicos absorben 15% daño si jugador sangra
       if(!isSp && atker.id==='vsCamp' && finalDmg>0 && this.activeEffects.player.some(e=>e.id==='bleed')){
-        const vsHeal = Math.floor(atker.maxHp * 0.10);
+        const vsHeal = Math.floor(finalDmg*0.15);
         atker.hp = Math.min(atker.maxHp, atker.hp + vsHeal);
         this.bat.eHp = Math.min(atker.maxHp, this.bat.eHp + vsHeal);
-        this._log(`🧛 Vampiro Superior: drena sangre — +${vsHeal} HP`,'color:#dc2626');
+        this._log(`🧛 Sed de sangre: +${vsHeal} HP`,'color:#dc2626');
       }
     }
 
@@ -4261,12 +4307,18 @@ function G() { return {
     return -1;
   },
   _doEnemySwitch(toIdx, cb){
-    // Guardar HP actual del enemigo saliente
     this.waveQueue[this.bat.activeEnemyIdx].currentHp = this.bat.eHp;
     const outName = this.enemy.name;
+    // Pasiva Mago enemigo: al salir, guardar el héroe al que se enfrentaba
+    if(this.enemy?.id==='mCamp') this.bat.magoEnemyLastHeroIdx = this.activeIdx;
     this.bat.enemySwitchCd = 3;
     this._log(`🔀 ¡${outName} se retira! → ${this.waveQueue[toIdx].name} entra en batalla`,'color:#f97316');
-    setTimeout(()=>{ if(this._ended) return; this._loadEnemy(toIdx); cb(); }, 500);
+    setTimeout(()=>{
+      if(this._ended) return;
+      // Pasiva Mago enemigo: al entrar, activar bonus solo si héroe diferente
+      if(this.waveQueue[toIdx]?.id==='mCamp') this.bat.magoEnemyFirstHitReady = (this.activeIdx !== this.bat.magoEnemyLastHeroIdx);
+      this._loadEnemy(toIdx); cb();
+    }, 500);
   },
   _nextAlive(){ for(let i=0;i<this.bat.heroes.length;i++) if(this.bat.heroes[i].hp>0) return i; return -1; },
   // Gestiona la caída de un héroe: si queda 1 vivo → auto-switch; si >1 → elige
@@ -4274,7 +4326,11 @@ function G() { return {
     const aliveCount = this.bat.heroes.filter(h=>h.hp>0).length;
     if(aliveCount===0){ this._lose(); return false; }
     if(aliveCount===1){
-      const ni=this._nextAlive(); this._clearPFx(); this.activeIdx=ni; this._restoreHeroDecomp();
+      const ni=this._nextAlive();
+      // Pasiva Mago: al entrar forzado, activar bonus solo si enemigo diferente
+      if(this.bat.heroes[ni]?.id==='mCamp') this.bat.magoFirstHitReady = (this.bat.activeEnemyIdx !== this.bat.magoLastEnemyIdx);
+      this._clearPFx(); this.activeIdx=ni; this._restoreHeroDecomp();
+      this._onHeroEnter();
       this._log(`→ ${this.AF().name} entra en batalla`,'color:var(--gold)');
       return true; // continúa flujo normal
     }
@@ -4293,6 +4349,14 @@ function G() { return {
   _enemyDown(){
     if(this._ended) return;
     this._log(`💀 ¡${this.enemy.name} derrotado!`,'color:#4ade80');
+    // Pasiva Precursor (Contagio): capturar negativos antes de que _loadEnemy los borre
+    if(this.AF()?.id==='ppCamp'){
+      const negFx = this.activeEffects.enemy.filter(e=>this.NEGATIVE_EFX.includes(e.id) && e.turns>0);
+      if(negFx.length>=2){
+        this.bat.contagioTransfer = negFx.map(e=>({ id:e.id, turns:Math.max(1,Math.floor(e.turns/2)) }));
+        this._log(`🐦‍⬛ Contagio: ${negFx.length} efectos se propagarán al siguiente objetivo`,'color:#86efac');
+      }
+    }
     // Prensa: liberar trap del jugador si el enemigo muere y el trap era de Prensa
     // Atrapar (trap sin isPrensa) NO se libera por muerte del atrapador
     const pTrap = this.activeEffects.player.find(e=>e.id==='trap');
@@ -4326,14 +4390,7 @@ function G() { return {
   },
   _roundWin(){
     if(this._ended) return; this._ended=true;
-
-    // ── CAMPAÑA ──────────────────────────────────────────────────
-    if(this.bat?.isCampaign){
-      this._handleCampaignRoomWin();
-      return;
-    }
-
-    // ── INVASIÓN ─────────────────────────────────────────────────
+    if(this.bat?.isDungeon){ this._dungeonRoomClear(); return; }
     if(this.bat?.isInvasion){
       this.invasionBattle = false;
       const goblinBonus  = this.bat.goblinFielded ? 1.3 : 1.0;
@@ -4344,7 +4401,7 @@ function G() { return {
       this.gold  = Math.min(this.gold  + this.goldAdded,  this.maxGold);
       this.water = Math.min(this.water + this.waterAdded, this.maxWater);
       this.rubies += 3; this.rubiesAdded = 3;
-      this.invasionWins++; this.checkAchievements();(`👺 ¡Bonus del Goblin! Oro +30%`,'color:#facc15');
+      this.invasionWins++; this.checkAchievements();
       this._log(`💀 ¡Invasión repelida! +${this.goldAdded}🟡 +${this.waterAdded}💧 +3♦`,'color:#f87171');
       this.result='win'; this.waiting=false; this.anim=false; this.save(); return;
     }
@@ -4352,14 +4409,15 @@ function G() { return {
     // ── RONDA NORMAL / JEFE ──────────────────────────────────────
     this.wins++;
     this.checkAchievements();
-    // enemyLevel avanza +1 por victoria normal, tapado al heroLvl+3
-    if(!this.bat?.isBossRound) this.enemyLevel = Math.min(this.enemyLevel + 1, this._enemyCap());
+    const completedRound = this.wins;
+    const cap = this._enemyCap(completedRound);
+    const atCap = !this.bat?.isBossRound && this.enemyLevel >= cap;
+    if(!atCap) this.enemyLevel = Math.min(this.enemyLevel + 1, cap);
     const goblinBonus  = this.bat?.goblinFielded ? 1.3 : 1.0;
     const bossMulti    = this.bat?.isBossRound   ? 2   : 1;
     // Recompensa basada en el nivel del primer enemigo de la oleada
     const firstEnemy   = this.waveQueue?.[0];
     const effectiveLvl = firstEnemy ? firstEnemy.level : this.enemyLevel;
-    const atCap        = !this.bat?.isBossRound && this.enemyLevel >= this._enemyCap();
     this.reward = Math.floor((50 + effectiveLvl*4 + effectiveLvl*effectiveLvl*2) * goblinBonus * bossMulti);
     this.rubiesAdded = 0;
     if(this.bat?.isBossRound){
@@ -4384,10 +4442,6 @@ function G() { return {
   },
   _lose(){
     if(this._ended) return; this._ended=true;
-    if(this.bat?.isCampaign){
-      this.campaignActive = false;
-      this.result='campaign_lose'; this.waiting=false; this.anim=false; return;
-    }
     if(this.bat?.isInvasion){
       this.invasionBattle = false;
       const lostGold  = Math.floor(this.gold  * 0.5);
@@ -4397,10 +4451,108 @@ function G() { return {
       this.notif(`💀 ¡Derrota! -${lostGold}🟡 -${lostWater}💧 saqueados`,'#f87171');
       this.save();
     }
+    if(this.bat?.isDungeon){
+      // Actualizar HP del dungeon con el estado real al caer
+      for(let i=0;i<this.bat.heroes.length;i++) if(this.dungeonState?.heroes[i]) this.dungeonState.heroes[i].hp=0;
+      this._log(`💀 El equipo cayó en la sala ${(this.bat.dungeonFloor||0)+1}`,'color:var(--danger)');
+      this.save();
+    }
     this.result='lose'; this.waiting=false; this.anim=false;
   },
-  exitBattle(){ this.invasionBattle = false; this.screen='village'; },
-  exitCampaign(){ this.campaignActive=false; this.result=null; this.screen='village'; },
+  exitBattle(){
+    if(this.bat?.isDungeon){
+      this.dungeonBattle=false;
+      if(this.result==='win' && !this.dungeonState?.complete){
+        // Sala superada, volver al mapa para continuar
+        this.screen='dungeon'; return;
+      }
+      // Completada o derrota: cobrar y limpiar
+      this._dungeonEnd(this.result==='win');
+      this.screen='dungeon'; return;
+    }
+    this.invasionBattle=false; this.screen='village';
+  },
+
+  // ── DUNGEON ──────────────────────────────────────────────────
+  startDungeon(biomeId){
+    if(!this.team.length) return this.notif('Añade héroes al equipo','#f97316');
+    const b=this.DUNGEONS.find(d=>d.id===biomeId);
+    if(!b||this.lvls.core<b.coreReq) return this.notif('Núcleo insuficiente','#f97316');
+    const heroLvl=this._maxHeroLvl();
+    this.dungeonState={
+      biomeId,floor:0,complete:false,goldEarned:0,waterEarned:0,rubiesEarned:0,
+      map:this._buildDungeonMap(b,heroLvl),
+      heroes:this.team.map(hid=>{const h=this.HD[hid];const cs=this.calcStats(hid);return{id:hid,name:hid==='ppCamp'?'Precursor':h.name,emoji:h.emoji,moves:this.heroMoves[hid]?.equipped||[],level:this.heroLvls[hid]||1,hp:cs.hp,maxHp:cs.hp,atk:cs.atk,def:cs.def,spatk:cs.spatk,spdef:cs.spdef,spd:cs.spd};})
+    };
+    this.notif(`${b.emoji} ¡${b.name} iniciada!`,'#e8c46a');this.save();
+  },
+  _buildDungeonMap(b,heroLvl){
+    const types=this._dungeonRoomTemplate(b.rooms);
+    const pool=[...this.ENEMY_POOL].sort(()=>Math.random()-.5);
+    let pi=0;
+    return types.map((type,i)=>{
+      if(type==='rest') return {type,done:false,reward:{gold:0,water:0,rubies:0}};
+      const isBoss=type==='boss',isElite=type==='elite';
+      const level=heroLvl+b.lvlOffset+(isBoss?5:Math.floor(i*4/b.rooms)+(isElite?1:0));
+      const campId=pool[pi++%pool.length],h=this.HD[campId];
+      const baseReward=Math.floor((50+level*4+level*level*2)*(isBoss?2.5:isElite?1.5:1)*b.rewardMult);
+      return {type,done:false,enemyCampId:campId,enemyLevel:level,enemyEmoji:h.emoji,enemyName:campId==='ppCamp'?'Precursor':h.name,reward:{gold:baseReward,water:baseReward,rubies:isBoss?2:0}};
+    });
+  },
+  _dungeonRoomTemplate(n){
+    const T={5:['C','CE','R','CE','B'],7:['C','CE','C','R','C','CE','B'],9:['C','CE','C','R','C','CE','C','CE','B'],10:['C','CE','C','R','C','CE','C','R','CE','B']};
+    return (T[n]||T[5]).map(t=>t==='CE'?(Math.random()<.5?'elite':'combat'):t==='C'?'combat':t==='R'?'rest':'boss');
+  },
+  _buildDungeonRoomWave(){
+    const room=this.dungeonState.map[this.dungeonState.floor];
+    const b=this.DUNGEONS.find(d=>d.id===this.dungeonState.biomeId);
+    const e=this._buildEnemy(room.enemyCampId,room.enemyLevel);
+    if(room.type==='elite'){const bst=s=>Math.floor(s*b.eliteBoost);e.hp=bst(e.hp);e.atk=bst(e.atk);e.def=bst(e.def);e.spatk=bst(e.spatk);e.spdef=bst(e.spdef);e.name='💀 '+e.name;}
+    if(room.type==='boss'){const bst=s=>Math.floor(s*b.bossBoost);e.hp=bst(e.hp);e.atk=bst(e.atk);e.def=bst(e.def);e.spatk=bst(e.spatk);e.spdef=bst(e.spdef);e.name='👑 '+e.name;e.isBoss=true;}
+    e.currentHp=e.hp;return [e];
+  },
+  enterDungeonRoom(i){
+    if(!this.dungeonState||i!==this.dungeonState.floor) return;
+    const room=this.dungeonState.map[i];
+    if(room.type==='rest'){
+      for(const h of this.dungeonState.heroes) h.hp=Math.min(h.maxHp,h.hp+Math.floor(h.maxHp*.25));
+      room.done=true;this.dungeonState.floor++;
+      this.notif('🛖 El equipo descansa: +25% HP','#4ade80');this.save();return;
+    }
+    this.dungeonBattle=true;this.screen='combat';this._initBattle();
+  },
+  abandonDungeon(){
+    if(!this.dungeonState) return;
+    this._dungeonEnd(false);this.notif('🗺️ Mazmorra abandonada','#f97316');
+  },
+  _dungeonRoomClear(){
+    const floor=this.dungeonState.floor,room=this.dungeonState.map[floor];
+    for(let i=0;i<this.bat.heroes.length;i++) if(this.dungeonState.heroes[i]) this.dungeonState.heroes[i].hp=Math.max(0,this.bat.heroes[i].hp);
+    this.dungeonState.goldEarned+=room.reward.gold;
+    this.dungeonState.waterEarned+=room.reward.water;
+    this.dungeonState.rubiesEarned+=room.reward.rubies;
+    room.done=true;this.dungeonState.floor++;
+    const b=this.DUNGEONS.find(d=>d.id===this.dungeonState.biomeId);
+    const complete=this.dungeonState.floor>=this.dungeonState.map.length;
+    if(complete){this.dungeonState.rubiesEarned+=b?.completionRubies??3;this.dungeonState.complete=true;}
+    this.goldAdded=complete?this.dungeonState.goldEarned:room.reward.gold;
+    this.waterAdded=complete?this.dungeonState.waterEarned:room.reward.water;
+    this.rubiesAdded=complete?this.dungeonState.rubiesEarned:room.reward.rubies;
+    if(complete) this._log(`🏆 ¡${b?.name??'MAZMORRA'} COMPLETADA! +${this.goldAdded}🟡 +${this.waterAdded}💧 +${this.rubiesAdded}♦`,'color:var(--gold)');
+    else this._log(`✅ Sala ${floor+1} — +${room.reward.gold}🟡 +${room.reward.water}💧${room.reward.rubies?' +'+room.reward.rubies+'♦':''}`,'color:#4ade80');
+    this.trackMission('wins');this.result='win';this.waiting=false;this.anim=false;this.save();
+  },
+  _dungeonEnd(success){
+    if(!this.dungeonState) return;
+    const g=Math.min(this.dungeonState.goldEarned,this.maxGold-this.gold);
+    const w=Math.min(this.dungeonState.waterEarned,this.maxWater-this.water);
+    const r=this.dungeonState.rubiesEarned;
+    this.gold=Math.min(this.gold+g,this.maxGold);
+    this.water=Math.min(this.water+w,this.maxWater);
+    this.rubies+=r;
+    if(g||w||r) this.notif(`🗺️ +${g}🟡 +${w}💧 +${r}♦ cobrados`,'#e8c46a');
+    this.dungeonState=null;this.dungeonBattle=false;this.save();
+  },
 
   exportSave(){
     this.save(); const data=localStorage.getItem('hq_v2'); if(!data) return this.notif('No hay progreso','#f97316');
@@ -4434,124 +4586,6 @@ function G() { return {
   },
   resetGame(){ this.showReset=true; },
   confirmReset(){ localStorage.removeItem('hq_v2'); localStorage.removeItem('hq_v1'); location.reload(); },
-
-  // ── CAMPAIGN LOGIC ───────────────────────────────────────────
-  startCampaign(){
-    if(!this.team.length) return this.notif('Añade héroes al equipo','#f97316');
-    this.campaignActive = true;
-    this.campaignRoom = 0;
-    this.campaignRooms = [null,null,null,null,null];
-    this.campaignHeroes = null;
-    this.campaignGoldEarned = 0;
-    this.campaignWaterEarned = 0;
-    this.campaignRubiesEarned = 0;
-    this.screen = 'campaign';
-  },
-  abandonCampaign(){
-    this.campaignActive = false;
-    this.result = null;
-    this.screen = 'village';
-  },
-  enterCampaignRoom(){
-    this.screen = 'combat';
-    this._initCampaignBattle(this.campaignRoom);
-  },
-  nextCampaignRoom(){
-    this.result = null;
-    this.screen = 'campaign';
-  },
-  _campaignHeroDisplay(){
-    if(this.campaignHeroes) return this.campaignHeroes;
-    // Before first room: show from team
-    return this.team.map(hid=>{
-      const cs=this.calcStats(hid); const h=this.HD[hid];
-      return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, hp:cs.hp, maxHp:cs.hp };
-    });
-  },
-  _buildCampaignWave(roomIdx){
-    const heroLvl = this._maxHeroLvl();
-    const isBoss = roomIdx === 4;
-    if(isBoss){
-      const boss = this._buildBossEnemy();
-      boss.currentHp = boss.hp;
-      return [boss];
-    }
-    const lvl = Math.max(1, heroLvl + roomIdx);
-    const campId = this.ENEMY_POOL[Math.floor(Math.random()*this.ENEMY_POOL.length)];
-    const e = this._buildEnemy(campId, lvl);
-    e.currentHp = e.hp;
-    return [e];
-  },
-  _initCampaignBattle(roomIdx){
-    const isBoss = roomIdx === 4;
-    this._ended=false; this.result=null; this.log=[]; this.activeIdx=0;
-    this.switching=false; this.forcedSwitch=false; this.pAnim='idle'; this.eAnim='eidle';
-    this.activeEffects={ player:[], enemy:[] };
-    this.waveQueue = this._buildCampaignWave(roomIdx);
-    this.waveTotal = this.waveQueue.length;
-    // Build or restore heroes
-    let heroes;
-    if(this.campaignHeroes && roomIdx > 0){
-      heroes = this.campaignHeroes.map(h=>({...h}));
-    } else {
-      heroes = this.team.map(hid=>{
-        const h=this.HD[hid]; const cs=this.calcStats(hid);
-        return { id:hid, name:hid==='ppCamp'?'Precursor':h.name, emoji:h.emoji, moves:this.heroMoves[hid]?.equipped||[], level:this.heroLvls[hid]||1, hp:cs.hp, maxHp:cs.hp, atk:cs.atk, def:cs.def, spatk:cs.spatk, spdef:cs.spdef, spd:cs.spd };
-      });
-    }
-    const firstAlive = heroes.findIndex(h=>h.hp>0);
-    if(firstAlive===-1){ this.notif('Todos los héroes han caído','#f87171'); this.abandonCampaign(); return; }
-    this.activeIdx = firstAlive;
-    this.bat={
-      eHp:0, eMax:0, cooldowns:{}, swapCb:null, goblinFielded:false, goblinDmgCount:0, goblinEnemyDmgCount:0, enemyLastPlayerSetup:false, activeEnemyIdx:0, enemySwitchCd:0, lastEnemyMoveUsed:null,
-      protectionCd:{player:0,enemy:0}, freezeImmune:{player:0,enemy:0}, heroDecomp:{}, flinched:{player:false,enemy:false}, parryActive:false, deathCb:null,
-      redistData:null, receivedSpecialDmg:false, lastEnemyDmg:0, reboteRawDmg:0, reboteType:'physical',
-      cigarroData:null, caraoCruzData:null, cagonTransfer:null, sinfoniaTransfer:false,
-      isBossRound:isBoss, isInvasion:false, isCampaign:true,
-      heroes
-    };
-    this.battleStats={ dmg:0, crits:0, efx:0, turns:0, heroContrib:{} };
-    for(const hid of this.team) this.battleStats.heroContrib[hid]=0;
-    if(this.bat.heroes[this.activeIdx]?.id==='gCamp') this.bat.goblinFielded=true;
-    const roomLbl = isBoss ? `👑 SALA 5/5 — BATALLA FINAL` : `🗺️ MAZMORRA — SALA ${roomIdx+1}/5`;
-    this._log(roomLbl,'color:#c084fc','room');
-    this._loadEnemy(0);
-  },
-  _healCampaignHeroes(){
-    const healed = this.bat.heroes.map(h=>({
-      ...h,
-      hp: h.hp>0 ? Math.min(h.maxHp, Math.floor(h.hp + h.maxHp*0.25)) : 0
-    }));
-    this.campaignHeroes = healed;
-  },
-  _handleCampaignRoomWin(){
-    const eLvl = this.waveQueue[0]?.level || 1;
-    const roomReward = Math.floor((40 + eLvl*4 + eLvl*eLvl*1.5) * 2); // ×2 vs normal
-    const goblinBonus = this.bat?.goblinFielded ? 1.3 : 1.0;
-    const finalReward = Math.floor(roomReward * goblinBonus);
-    this.goldAdded  = this.gold  < this.maxGold  ? Math.min(finalReward, this.maxGold  - this.gold)  : 0;
-    this.waterAdded = this.water < this.maxWater ? Math.min(finalReward, this.maxWater - this.water) : 0;
-    this.gold  = Math.min(this.gold  + this.goldAdded,  this.maxGold);
-    this.water = Math.min(this.water + this.waterAdded, this.maxWater);
-    this.campaignGoldEarned  += this.goldAdded;
-    this.campaignWaterEarned += this.waterAdded;
-    this.campaignRooms[this.campaignRoom] = 'win';
-    if(this.campaignRoom === 4){
-      // ¡Mazmorra completada!
-      const bonusRubies = 5;
-      this.rubies += bonusRubies;
-      this.campaignRubiesEarned = bonusRubies;
-      this.wins++; this.bossWins++; this.checkAchievements();
-      this.trackMission('wins');
-      this._log(`🏆 ¡MAZMORRA COMPLETADA! +${bonusRubies}♦ bonus`,'color:var(--gold)','room');
-      this.result='campaign_win'; this.waiting=false; this.anim=false; this.save();
-    } else {
-      this._healCampaignHeroes();
-      this.campaignRoom++;
-      this._log(`💚 Sala ${this.campaignRoom} superada — +25% HP recuperado`,'color:#4ade80','room');
-      this.result='campaign_room'; this.waiting=false; this.anim=false; this.save();
-    }
-  },
 
   _float(txt,xPct,yPct,color){
     const el=document.createElement('div'); el.className='float'; el.style.color=color;
